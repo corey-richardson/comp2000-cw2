@@ -24,6 +24,7 @@ Table PtoRequest {
   status statuses [not null]
   start_date datetime [not null]
   end_date datetime [not null]
+  request_comment text
 }
 
 Enum statuses {
