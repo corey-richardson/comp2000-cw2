@@ -8,7 +8,7 @@ Table User {
   address text [not null]
   job_title text [not null]
   start_date date [not null]
-  password text [unique, not null]
+  password text [not null]
   role roles [not null]
 }
 
