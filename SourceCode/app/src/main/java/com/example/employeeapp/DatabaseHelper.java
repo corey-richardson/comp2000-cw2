@@ -51,13 +51,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String createPtoRequestTable = "CREATE TABLE PtoRequest (" +
                 "id INTEGER PRIMARY KEY," +
                 "requester_id INTEGER NOT NULL," +
-                "approver_id INTEGER NOT NULL," +
                 "start_date TEXT NOT NULL," + // YYYY-MM-DD HH:MM:SS
                 "end_date TEXT NOT NULL," +   // YYYY-MM-DD HH:MM:SS
                 "status TEXT NOT NULL CHECK (status IN ('Approved', 'Waiting', 'Denied'))," +
                 "request_comment TEXT," +
                 "FOREIGN KEY (requester_id) REFERENCES User (id)," +
-                "FOREIGN KEY (approver_id) REFERENCES User (id)" +
                 ");";
 
         String createLineTable = "CREATE TABLE Line (" +
@@ -142,7 +140,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         PtoRequest ptoRequest = new PtoRequest(
                 cursor.getInt(cursor.getColumnIndexOrThrow("id")),
                 cursor.getInt(cursor.getColumnIndexOrThrow("requester_id")),
-                cursor.getInt(cursor.getColumnIndexOrThrow("approver_id")),
                 cursor.getString(cursor.getColumnIndexOrThrow("status")),
                 startDate,
                 endDate,
