@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Settings">
+
+    <ImageView
+        android:id="@+id/employeePfp"
+        android:layout_width="161dp"
+        android:layout_height="167dp"
+        android:layout_marginTop="56dp"
+        android:background="@drawable/circle"
+        android:scaleType="centerCrop"
+        android:src="@drawable/empty_profile_pic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/employeeName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-medium"
+        android:text="id.employeeName"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/employeePfp" />
+
+    <LinearLayout
+        android:layout_width="379dp"
+        android:layout_height="649dp"
+        android:layout_marginTop="279dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Switch
+            android:id="@+id/switchPtoRequests"
+            android:layout_width="match_parent"
+            android:layout_height="78dp"
+            android:checked="true"
+            android:text="Notify when PTO Request Updates"
+            tools:checked="false" />
+
+        <Switch
+            android:id="@+id/switchDetailsUpdated"
+            android:layout_width="match_parent"
+            android:layout_height="78dp"
+            android:checked="true"
+            android:text="Notify when My Details Updates" />
+
+        <Switch
+            android:id="@+id/switchDarkMode"
+            android:layout_width="match_parent"
+            android:layout_height="78dp"
+            android:text="Dark Mode" />
+
+        <Switch
+            android:id="@+id/switchRedGreenColourblind"
+            android:layout_width="match_parent"
+            android:layout_height="78dp"
+            android:text="Red Green Colourblind" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
