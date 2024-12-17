@@ -31,9 +31,6 @@
             android:name=".Settings"
             android:exported="false" />
         <activity
-            android:name=".MainActivity2"
-            android:exported="false" />
-        <activity
             android:name=".RequestPTO"
             android:exported="false" />
         <activity
