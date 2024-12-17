@@ -117,6 +117,36 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return employee;
     }
 
+    public PtoRequest cursorToPtoRequest(Cursor cursor) {
+        // Convert SQLite Date TEXT to Java.Date type
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        String startDateString = cursor.getString(cursor.getColumnIndexOrThrow("start_date"));
+        String endDateString = cursor.getString(cursor.getColumnIndexOrThrow("end_date"));
+
+        Date startDate, endDate;
+        try {
+            startDate = dateFormat.parse(startDateString);
+            endDate = dateFormat.parse(endDateString);
+        } catch (ParseException e) {
+            Log.d("DateParseError", "Couldn't parse " + startDateString + " or " + endDateString + " to a Java.Date object.");
+            startDate = null;
+            endDate = null;
+        }
+
+        PtoRequest ptoRequest = new PtoRequest(
+                cursor.getInt(cursor.getColumnIndexOrThrow("id")),
+                cursor.getInt(cursor.getColumnIndexOrThrow("requester_id")),
+                cursor.getInt(cursor.getColumnIndexOrThrow("approver_id")),
+                cursor.getString(cursor.getColumnIndexOrThrow("status")),
+                startDate,
+                endDate,
+                cursor.getString(cursor.getColumnIndexOrThrow("request_comment"))
+        );
+
+        cursor.close();
+        return ptoRequest;
+    }
+
     // Common Queries
     public List<Employee> getAllEmployees() {
         List<Employee> employeeList = new ArrayList<>();
@@ -134,6 +164,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
 
         return employeeList;
+    }
+
+    public List<PtoRequest> getAllPtoRequests() {
+        List<PtoRequest> ptoRequestList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM User", null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                ptoRequestList.add(cursorToPtoRequest(cursor));
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+
+        return ptoRequestList;
     }
 
     public Employee getManager(int subordinateId) {
