@@ -55,7 +55,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "end_date TEXT NOT NULL," +   // YYYY-MM-DD HH:MM:SS
                 "status TEXT NOT NULL CHECK (status IN ('Approved', 'Waiting', 'Denied'))," +
                 "request_comment TEXT," +
-                "FOREIGN KEY (requester_id) REFERENCES User (id)," +
+                "FOREIGN KEY (requester_id) REFERENCES User (id)" +
                 ");";
 
         String createLineTable = "CREATE TABLE Line (" +
