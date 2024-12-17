@@ -15,11 +15,16 @@ import android.util.Log;
 
 public class MainActivity extends AppCompatActivity {
 
+    private DatabaseHelper databaseHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
+        // Initialise databaseHelper
+        databaseHelper = new DatabaseHelper(this);
     }
 
     public void handleLogin(View v)

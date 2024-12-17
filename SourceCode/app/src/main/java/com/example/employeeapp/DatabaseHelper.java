@@ -3,6 +3,7 @@ package com.example.employeeapp;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "database.db";
@@ -46,9 +47,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "FOREIGN KEY (subordinate_id) REFERENCES User (id)" +
                 ");";
 
-        db.execSQL(createUserTable);
-        db.execSQL(createPtoRequestTable);
-        db.execSQL(createLineTable);
+        try {
+            db.execSQL(createUserTable);
+            db.execSQL(createPtoRequestTable);
+            db.execSQL(createLineTable);
+            Log.d("DatabaseCreationSuccess", (DATABASE_NAME + " " + DATABASE_VERSION + " was created."));
+        } catch (Exception e) {
+            Log.d("DatabaseCreationError", Log.getStackTraceString(e));
+        }
     }
 
     @Override
