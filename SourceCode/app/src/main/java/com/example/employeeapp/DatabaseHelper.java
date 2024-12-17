@@ -14,7 +14,7 @@ import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "database.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     private static DatabaseHelper instance;
 
@@ -75,6 +75,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         } catch (Exception e) {
             Log.d("DatabaseCreationError", Log.getStackTraceString(e));
         }
+
+        db.execSQL("CREATE INDEX idx_user_first_name ON User (first_name);");
+        db.execSQL("CREATE INDEX idx_user_last_name ON User (last_name);");
+        db.execSQL("CREATE INDEX idx_user_email ON User (email);");
+        db.execSQL("CREATE INDEX idx_pto_request_requester ON PtoRequest (requester_id);");
+
     }
 
     @Override
