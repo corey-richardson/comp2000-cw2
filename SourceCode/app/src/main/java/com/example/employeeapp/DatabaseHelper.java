@@ -9,8 +9,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "database.db";
     private static final int DATABASE_VERSION = 1;
 
+    private static DatabaseHelper instance;
+
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+    // Singleton pattern to prevent multiple instances of the database helper
+    public static synchronized DatabaseHelper getInstance(Context context) {
+        if (instance == null) {
+            instance = new DatabaseHelper(context.getApplicationContext());
+            Log.d("DatabaseInstance", "Instance created.");
+        }
+        else { Log.d("DatabaseInstance", "Instance carried forward."); }
+        return instance;
     }
 
     @Override
