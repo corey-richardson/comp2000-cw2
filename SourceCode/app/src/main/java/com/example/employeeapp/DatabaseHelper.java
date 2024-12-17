@@ -130,10 +130,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Date startDate, endDate;
         try {
             startDate = dateFormat.parse(startDateString);
+        } catch (ParseException e) {
+            Log.e("DateParseError", "Couldn't parse " + startDateString + "to a Java.Date object.");
+            startDate = null;
+        }
+        try {
             endDate = dateFormat.parse(endDateString);
         } catch (ParseException e) {
-            Log.d("DateParseError", "Couldn't parse " + startDateString + " or " + endDateString + " to a Java.Date object.");
-            startDate = null;
+            Log.e("DateParseError", "Couldn't parse " + endDateString + "to a Java.Date object.");
             endDate = null;
         }
 
