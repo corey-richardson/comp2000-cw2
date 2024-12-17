@@ -173,7 +173,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         List<PtoRequest> ptoRequestList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.rawQuery("SELECT * FROM User", null);
+        Cursor cursor = db.rawQuery("SELECT * FROM PtoRequest", null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                ptoRequestList.add(cursorToPtoRequest(cursor));
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+
+        return ptoRequestList;
+    }
+
+    public List<PtoRequest> getAllPtoRequestsByRequester(int requesterId) {
+        List<PtoRequest> ptoRequestList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM PtoRequest WHERE id = ?",
+                new String[]{Integer.toString(requesterId)});
 
         if (cursor.moveToFirst()) {
             do {
