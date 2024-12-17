@@ -4,6 +4,13 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.database.Cursor;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
+import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "database.db";
@@ -20,8 +27,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (instance == null) {
             instance = new DatabaseHelper(context.getApplicationContext());
             Log.d("DatabaseInstance", "Instance created.");
+        } else {
+            Log.d("DatabaseInstance", "Instance carried forward.");
         }
-        else { Log.d("DatabaseInstance", "Instance carried forward."); }
         return instance;
     }
 
@@ -76,5 +84,87 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS Line;");
 
         onCreate(db);
+    }
+
+    // Helper Queries
+    public Employee cursorToEmployee(Cursor cursor) {
+        // Convert SQLite Date TEXT to Java.Date type
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        String startDateString = cursor.getString(cursor.getColumnIndexOrThrow("start_date"));
+
+        Date startDate;
+        try {
+            startDate = dateFormat.parse(startDateString);
+        } catch (ParseException e) {
+            Log.d("DateParseError", "Couldn't parse " + startDateString + " to a Java.Date object.");
+            startDate = null;
+        }
+
+        Employee employee = new Employee(
+                cursor.getInt(cursor.getColumnIndexOrThrow("id")),
+                cursor.getString(cursor.getColumnIndexOrThrow("first_name")),
+                cursor.getString(cursor.getColumnIndexOrThrow("last_name")),
+                cursor.getString(cursor.getColumnIndexOrThrow("email")),
+                cursor.getString(cursor.getColumnIndexOrThrow("phone")),
+                cursor.getString(cursor.getColumnIndexOrThrow("address")),
+                cursor.getString(cursor.getColumnIndexOrThrow("job_title")),
+                startDate,
+                cursor.getString(cursor.getColumnIndexOrThrow("password")),
+                cursor.getString(cursor.getColumnIndexOrThrow("role"))
+        );
+
+        cursor.close();
+        return employee;
+    }
+
+    // Common Queries
+    public List<Employee> getAllEmployees() {
+        List<Employee> employeeList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM User", null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                employeeList.add(cursorToEmployee(cursor));
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+
+        return employeeList;
+    }
+
+    public Employee getManager(int subordinateId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(
+                "SELECT manager_id FROM Line WHERE subordinate_id = ?",
+                new String[]{Integer.toString(subordinateId)} );
+
+        // No manager found
+        if (!cursor.moveToFirst())
+        {
+            cursor.close();
+            return null;
+        }
+
+        int managerId = cursor.getInt(cursor.getColumnIndexOrThrow("manager_id"));
+
+        // Query to get managers details
+        Cursor managerCursor = db.rawQuery(
+                "SELECT * FROM User WHERE id = ?",
+                new String[]{Integer.toString(managerId)}
+        );
+
+        // Unpack manager details and create Employee instance, *query
+        if (managerCursor.moveToFirst()) {
+            return cursorToEmployee(managerCursor);
+        } else {
+            cursor.close();
+            // Manager not found in User table
+            return null;
+        }
     }
 }
