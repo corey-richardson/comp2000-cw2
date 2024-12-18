@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import java.util.List;
+import android.content.Context;
+import android.content.SharedPreferences;
+import com.google.gson.Gson;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "database.db";
@@ -240,5 +243,50 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             // Manager not found in User table
             return null;
         }
+    }
+
+    public void saveCurrentUser(Context context, Employee employee) {
+        Gson gson = new Gson();
+        String employeeJson = gson.toJson(employee);
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences("CurrentUser", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("currentUser", employeeJson);
+        editor.apply();
+    }
+
+    // Retrieve Employee from SharedPreferences
+    public Employee loadCurrentUser(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("CurrentUser", Context.MODE_PRIVATE);
+        String employeeJson = sharedPreferences.getString("currentUser", null);
+
+        if (employeeJson != null) {
+            Gson gson = new Gson();
+            return gson.fromJson(employeeJson, Employee.class);
+        }
+
+        return null; // No current user
+    }
+
+    // Writes user to SharedPreferences if exists in database
+    public boolean authenticateUser(Context context, String email, String password) {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM User WHERE email = ? AND password = ?",
+                new String[]{ email, password });
+        boolean exists = cursor.getCount() > 0;
+
+        if (!exists) {
+            Log.d("Login", "Login Failed, User doesn't exist.");
+            return false;
+        }
+
+        Employee employee = cursorToEmployee(cursor);
+        saveCurrentUser(context, employee);
+        Log.d("Login", "Login Succeeded, " + employee.getFull_name() + ".");
+
+        cursor.close();
+        db.close();
+
+        return true;
     }
 }
