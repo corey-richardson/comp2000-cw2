@@ -17,7 +17,7 @@ import com.google.gson.Gson;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "database.db";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
     private static DatabaseHelper instance;
 
@@ -48,6 +48,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "job_title TEXT NOT NULL," +
                 "start_date TEXT NOT NULL," + // YYYY-MM-DD
                 "password TEXT NOT NULL," +
+                "holiday_allowance INT NOT NULL CHECK (holiday_allowance > 0)," +
                 "role TEXT NOT NULL CHECK (role IN ('Admin', 'Employee'))" +
                 ");";
 
@@ -117,6 +118,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 cursor.getString(cursor.getColumnIndexOrThrow("job_title")),
                 startDate,
                 cursor.getString(cursor.getColumnIndexOrThrow("password")),
+                cursor.getInt(cursor.getColumnIndexOrThrow("holiday_allowance")),
                 cursor.getString(cursor.getColumnIndexOrThrow("role"))
         );
 
