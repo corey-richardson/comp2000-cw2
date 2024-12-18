@@ -48,7 +48,7 @@ public class EmployeeDashboard extends AppCompatActivity {
     public void handleLogout(View v)
     {
         Intent iLogout = new Intent(this, MainActivity.class);
-        
+
         DatabaseHelper databaseHelper = DatabaseHelper.getInstance(this);
         databaseHelper.clearCurrentUser(this);
 

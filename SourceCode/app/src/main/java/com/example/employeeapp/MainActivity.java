@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.util.Log;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,7 +37,11 @@ public class MainActivity extends AppCompatActivity {
         String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
 
-        databaseHelper.authenticateUser(this, email, password);
+        boolean result = databaseHelper.authenticateUser(this, email, password);
+        if (!result) {
+            editTextPassword.setText("");
+            Toast.makeText(this, "Incorrect email or password.", Toast.LENGTH_LONG).show();
+        }
 
         Employee user = databaseHelper.loadCurrentUser(this);
         if (user == null)
