@@ -9,6 +9,7 @@ Table User {
   job_title text [not null]
   start_date date [not null]
   password text [not null]
+  holiday_allowance int [default: 0]
   role roles [not null]
 }
 
@@ -20,10 +21,9 @@ Enum roles {
 Table PtoRequest {
   id int PK
   requestor_id int [ref: < User.id, not null]
-  approver_id int [ref: < User.id, not null]
-  status statuses [not null]
   start_date datetime [not null]
   end_date datetime [not null]
+  status statuses [not null]
   request_comment text
 }
 
