@@ -10,6 +10,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import android.widget.Button;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.util.Log;
 
@@ -29,25 +30,31 @@ public class MainActivity extends AppCompatActivity {
 
     public void handleLogin(View v)
     {
-        // TEST CODE!
-        // Does not yet handle authentication and accounts
-        TextView t = findViewById(R.id.loginScreenEmailField);
-        Intent iLaunchDashboard;
+        EditText editTextEmail = findViewById(R.id.loginScreenEmailField);
+        EditText editTextPassword = findViewById(R.id.loginScreenPasswordField);
 
-        Log.d("information", t.getText().toString());
+        String email = editTextEmail.getText().toString().trim();
+        String password = editTextPassword.getText().toString().trim();
 
-        if (t.getText().toString().equals("admin"))
+        databaseHelper.authenticateUser(this, email, password);
+
+        Employee user = databaseHelper.loadCurrentUser(this);
+        if (user == null)
         {
-            iLaunchDashboard = new Intent(this, AdminDashboard.class);
-        }
-        else
-        {
-            iLaunchDashboard = new Intent(this, EmployeeDashboard.class);
+            return;
         }
 
+        Intent iLaunchHomepage;
+        if (user.getRole().equals("Admin"))
+        {
+            iLaunchHomepage = new Intent(this, AdminDashboard.class);
+        }
+        else {
+            iLaunchHomepage = new Intent(this, EmployeeDashboard.class);
+        }
 
-        // Intent iLaunchDashboard = new Intent(this, EmployeeDashboard.class);
-        startActivity(iLaunchDashboard);
+        startActivity(iLaunchHomepage);
+
     }
 
     public void launchForgotPassword(View v)
