@@ -48,7 +48,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "job_title TEXT NOT NULL," +
                 "start_date TEXT NOT NULL," + // YYYY-MM-DD
                 "password TEXT NOT NULL," +
-                "holiday_allowance INT NOT NULL CHECK (holiday_allowance > 0)," +
+                "holiday_allowance INT NOT NULL CHECK (holiday_allowance > 0) DEFAULT 0," +
                 "role TEXT NOT NULL CHECK (role IN ('Admin', 'Employee'))" +
                 ");";
 
@@ -82,6 +82,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE INDEX idx_user_last_name ON User (last_name);");
         db.execSQL("CREATE INDEX idx_user_email ON User (email);");
         db.execSQL("CREATE INDEX idx_pto_request_requester ON PtoRequest (requester_id);");
+
+        db.execSQL("INSERT INTO User (first_name, last_name, email, phone, address, job_title, " +
+                "start_date, password, role, holiday_allowance) " +
+                "VALUES ('Admin', 'User', 'admin@example.com', '1234567890', '123 Admin Street', " +
+                "'System Admin', '2024-01-01', 'admin_password', 'Admin', 30);");
+
 
     }
 
@@ -270,25 +276,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return null; // No current user
     }
 
+    public void clearCurrentUser(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("CurrentUser", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove("currentUser");
+        editor.apply();
+    }
+
     // Writes user to SharedPreferences if exists in database
     public boolean authenticateUser(Context context, String email, String password) {
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM User WHERE email = ? AND password = ?",
                 new String[]{ email, password });
-        boolean exists = cursor.getCount() > 0;
 
-        if (!exists) {
+        if (cursor != null && cursor.moveToFirst()) {
+            Employee employee = cursorToEmployee(cursor);
+            saveCurrentUser(context, employee);
+
+            Log.d("Login", "Login Succeeded, " + employee.getFull_name() + ".");
+            cursor.close();
+            db.close();
+            return true;
+        } else {
             Log.d("Login", "Login Failed, User doesn't exist.");
+            cursor.close();
+            db.close();
             return false;
         }
-
-        Employee employee = cursorToEmployee(cursor);
-        saveCurrentUser(context, employee);
-        Log.d("Login", "Login Succeeded, " + employee.getFull_name() + ".");
-
-        cursor.close();
-        db.close();
-
-        return true;
     }
 }
