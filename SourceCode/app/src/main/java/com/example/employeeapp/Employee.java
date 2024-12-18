@@ -13,11 +13,12 @@ public class Employee {
     private String job_title;
     private Date start_date;
     private String password;
+    private int holiday_allowance;
     private String role;
 
     public Employee(int id,
                     String first_name, String last_name, String email, String phone, String address,
-                    String job_title, Date start_date, String password, String role) {
+                    String job_title, Date start_date, String password, int holiday_allowance, String role) {
         this.id = id;
         this.first_name = first_name;
         this.last_name = last_name;
@@ -28,6 +29,12 @@ public class Employee {
         this.start_date = start_date;
         this.password = password;
         this.role = role;
+
+        if (holiday_allowance < 0) {
+            this.holiday_allowance = 0;
+        } else {
+            this.holiday_allowance = holiday_allowance;
+        }
     }
 
     public void repr()
@@ -73,6 +80,10 @@ public class Employee {
 
     public String getPassword() {
         return password;
+    }
+
+    public int getHoliday_allowance() {
+        return holiday_allowance;
     }
 
     public String getRole() {
