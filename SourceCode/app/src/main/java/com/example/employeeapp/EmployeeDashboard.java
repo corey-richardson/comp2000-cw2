@@ -48,6 +48,9 @@ public class EmployeeDashboard extends AppCompatActivity {
     public void handleLogout(View v)
     {
         Intent iLogout = new Intent(this, MainActivity.class);
+        
+        DatabaseHelper databaseHelper = DatabaseHelper.getInstance(this);
+        databaseHelper.clearCurrentUser(this);
 
         // Clear the back stack to prevent going back to this activity
         iLogout.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
