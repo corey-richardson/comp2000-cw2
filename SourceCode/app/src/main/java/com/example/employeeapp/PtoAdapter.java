@@ -1,6 +1,8 @@
 package com.example.employeeapp;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.database.SQLException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,15 +11,22 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+
 import java.util.List;
 
 public class PtoAdapter extends BaseAdapter {
+
+    private DatabaseHelper databaseHelper;
     private Context context;
     private List<PtoRequest> ptoRequestList;
 
     public PtoAdapter(Context context, List<PtoRequest> ptoRequestList) {
         this.context = context;
         this.ptoRequestList = ptoRequestList;
+        this.databaseHelper = DatabaseHelper.getInstance(context);
     }
 
     @Override
@@ -75,6 +84,38 @@ public class PtoAdapter extends BaseAdapter {
                 break;
         }
 
+        cancelButton.setOnClickListener(v -> {
+            
+            // https://developer.android.com/develop/ui/views/components/dialogs
+            AlertDialog.Builder confirmDeletion = new AlertDialog.Builder(context);
+            confirmDeletion.setMessage("Confirm cancellation?");
+            confirmDeletion.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    cancelPtoRequest(ptoRequest);
+                    ptoRequestList.remove(position);
+                    notifyDataSetChanged(); // Refreshes ListView
+                    Toast.makeText(context, "Cancelled PTO Request.", Toast.LENGTH_SHORT).show();
+                }
+            });
+            confirmDeletion.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+
+            confirmDeletion.show();
+        });
+
         return convertView;
+    }
+
+    private void cancelPtoRequest(PtoRequest ptoRequest) {
+        try {
+            databaseHelper.deletePtoRequest(ptoRequest.getId());
+        } catch (SQLException e) { // Propagated from DatabaseHelper::deletePtoRequest to UI Layer
+            Toast.makeText(context, "Failed to cancel PTO request,", Toast.LENGTH_SHORT).show();
+        }
     }
 }

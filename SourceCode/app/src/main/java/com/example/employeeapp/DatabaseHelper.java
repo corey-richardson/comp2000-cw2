@@ -1,6 +1,7 @@
 package com.example.employeeapp;
 
 import android.content.Context;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -13,6 +14,8 @@ import java.util.Locale;
 import java.util.List;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.widget.Toast;
+
 import com.google.gson.Gson;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -312,5 +315,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         });
 
         db.close();
+    }
+
+    // https://www.geeksforgeeks.org/how-to-delete-data-in-sqlite-database-in-android/
+    public void deletePtoRequest(int id) {
+
+        try (SQLiteDatabase db = getWritableDatabase()) { // AndroidStudio suggested this \_O_/
+            db.delete("PtoRequest", "id = ?", new String[]{Integer.toString(id)});
+        } catch (SQLException e) {
+            Log.e("DatabaseHelper", "Error deleting PTO request " + id, e);
+            throw e; // Propagates the error to PtoAdapter::cancelPtoRequest to Toast in context
+        }
+        // statement automatically manages resources and ensures they are closed after use
     }
 }
