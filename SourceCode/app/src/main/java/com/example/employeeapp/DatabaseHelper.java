@@ -107,17 +107,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Helper Queries
     public Employee cursorToEmployee(Cursor cursor) {
-        // Convert SQLite Date TEXT to Java.Date type
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        String startDateString = cursor.getString(cursor.getColumnIndexOrThrow("start_date"));
-
-        Date startDate;
-        try {
-            startDate = dateFormat.parse(startDateString);
-        } catch (ParseException e) {
-            Log.d("DateParseError", "Couldn't parse " + startDateString + " to a Java.Date object.");
-            startDate = null;
-        }
 
         Employee employee = new Employee(
                 cursor.getInt(cursor.getColumnIndexOrThrow("id")),
@@ -127,7 +116,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 cursor.getString(cursor.getColumnIndexOrThrow("phone")),
                 cursor.getString(cursor.getColumnIndexOrThrow("address")),
                 cursor.getString(cursor.getColumnIndexOrThrow("job_title")),
-                startDate,
+                cursor.getString(cursor.getColumnIndexOrThrow("start_date")),
                 cursor.getString(cursor.getColumnIndexOrThrow("password")),
                 cursor.getInt(cursor.getColumnIndexOrThrow("holiday_allowance")),
                 cursor.getString(cursor.getColumnIndexOrThrow("role"))
@@ -314,10 +303,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         DatabaseHelper databaseHelper = DatabaseHelper.getInstance(context);
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
 
-        Date startDate = employee.getStart_date();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String startDateString = dateFormat.format(startDate);
-
         // For UPDATEs, use Prepared Statements rather than rawQuery
         String updateQuery = "UPDATE User SET " +
                 "first_name = ?, " +
@@ -339,7 +324,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 employee.getPhone(),
                 employee.getAddress(),
                 employee.getJob_title(),
-                startDateString,
+                employee.getStart_date(),
                 employee.getPassword(),
                 employee.getRole(),
                 employee.getHoliday_allowance(),
