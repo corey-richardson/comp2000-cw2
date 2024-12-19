@@ -1,18 +1,17 @@
 package com.example.employeeapp;
 
-import java.util.Date;
 import android.util.Log;
 
 public class PtoRequest {
     private int id;
     private int requester_id;
     private String status;
-    private Date start_date;
-    private Date end_date;
+    private String start_date;
+    private String end_date;
     private String request_comment;
 
-    public PtoRequest(int id, int requester_id, String status, Date start_date,
-                      Date end_date, String request_comment) {
+    public PtoRequest(int id, int requester_id, String status, String start_date,
+                      String end_date, String request_comment) {
         this.id = id;
         this.requester_id = requester_id;
         this.status = status;
@@ -33,11 +32,11 @@ public class PtoRequest {
         return status;
     }
 
-    public Date getStart_date() {
+    public String getStart_date() {
         return start_date;
     }
 
-    public Date getEnd_date() {
+    public String getEnd_date() {
         return end_date;
     }
 
