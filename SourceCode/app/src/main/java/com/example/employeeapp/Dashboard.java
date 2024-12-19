@@ -42,9 +42,6 @@ public class Dashboard extends AppCompatActivity {
         } else {
             employeeNameTextView.setText(currentUser.getFull_name());
         }
-
-
-
     }
 
     public void launchEmployeeDetails(View v)

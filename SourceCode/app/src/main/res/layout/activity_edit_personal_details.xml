@@ -54,7 +54,14 @@
             android:text="Name" />
 
         <EditText
-            android:id="@+id/employeeDetailsNameField"
+            android:id="@+id/employeeDetailsFirstNameField"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:ems="10"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/employeeDetailsLastNameField"
             android:layout_width="match_parent"
             android:layout_height="44dp"
             android:ems="10"
@@ -130,6 +137,8 @@
             android:id="@+id/employeeDetailsJobTitleField"
             android:layout_width="match_parent"
             android:layout_height="44dp"
+            android:clickable="false"
+            android:focusable="false"
             android:ems="10"
             android:inputType="text" />
 
@@ -146,10 +155,11 @@
             android:text="Start Date" />
 
         <EditText
-            android:id="@+id/employeeDetailsNameField2"
+            android:id="@+id/employeeDetailsStartDateField"
             android:layout_width="match_parent"
             android:layout_height="44dp"
             android:clickable="false"
+            android:focusable="false"
             android:ems="10"
             android:inputType="datetime|date" />
 
