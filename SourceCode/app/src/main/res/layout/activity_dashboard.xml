@@ -5,17 +5,18 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EmployeeDashboard">
+    tools:context=".Dashboard">
 
     <ImageView
         android:id="@+id/employeePfp"
-        android:layout_width="203dp"
-        android:layout_height="213dp"
+        android:layout_width="161dp"
+        android:layout_height="167dp"
         android:layout_marginTop="56dp"
         android:background="@drawable/circle"
         android:scaleType="centerCrop"
         android:src="@drawable/empty_profile_pic"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -23,11 +24,10 @@
         android:id="@+id/employeeName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:fontFamily="sans-serif-medium"
-        android:text="id.employeeName"
+        android:text="id.employeeName [Admin]"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/ptoDashboardLayout"
+        app:layout_constraintBottom_toTopOf="@+id/aDashboardLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,17 +35,15 @@
         app:layout_constraintVertical_bias="0.5" />
 
     <LinearLayout
-        android:id="@+id/ptoDashboardLayout"
+        android:id="@+id/aDashboardLayout"
         android:layout_width="379dp"
-        android:layout_height="350dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/employeeName">
+        app:layout_constraintStart_toStartOf="parent">
 
         <Button
             android:id="@+id/detailsButton"
@@ -55,24 +53,13 @@
             android:onClick="launchEmployeeDetails"
             android:text="View My Details" />
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="16dp"
-            tools:layout_editor_absoluteY="48dp" />
-
         <Button
             android:id="@+id/holidaysButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="#C1C1C1"
             android:onClick="launchHolidayRequests"
-            android:text="Manage My Holidays"
-            tools:layout_editor_absoluteY="64dp" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="16dp"
-            tools:layout_editor_absoluteY="112dp" />
+            android:text="Manage My Holidays" />
 
         <Button
             android:id="@+id/settingsButton"
@@ -80,13 +67,31 @@
             android:layout_height="wrap_content"
             android:backgroundTint="#C1C1C1"
             android:onClick="launchSettings"
-            android:text="Notification Preferences and Settings"
-            tools:layout_editor_absoluteY="128dp" />
+            android:text="Notification Preferences and Settings" />
 
-        <Space
+        <Button
+            android:id="@+id/employeeDetailsButton"
             android:layout_width="match_parent"
-            android:layout_height="16dp"
-            tools:layout_editor_absoluteY="176dp" />
+            android:layout_height="wrap_content"
+            android:backgroundTint="#C1C1C1"
+            android:onClick="launchAEmployeeDetails"
+            android:text="View Employee Details" />
+
+        <Button
+            android:id="@+id/employeePtoRequestsButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#C1C1C1"
+            android:onClick="launchPtoRequests"
+            android:text="View Employee PTO Requests" />
+
+        <Button
+            android:id="@+id/addEmployeeButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#C1C1C1"
+            android:onClick="launchAddEmployee"
+            android:text="Add an Employee" />
 
         <Button
             android:id="@+id/logoutButton"
@@ -94,8 +99,7 @@
             android:layout_height="wrap_content"
             android:backgroundTint="#2196F3"
             android:onClick="handleLogout"
-            android:text="Log Out"
-            tools:layout_editor_absoluteY="192dp" />
+            android:text="Log Out" />
 
     </LinearLayout>
 
