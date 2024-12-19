@@ -17,7 +17,7 @@ import com.google.gson.Gson;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "database.db";
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
 
     private static DatabaseHelper instance;
 
@@ -59,7 +59,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "end_date TEXT NOT NULL," +   // YYYY-MM-DD HH:MM:SS
                 "status TEXT NOT NULL CHECK (status IN ('Approved', 'Waiting', 'Denied'))," +
                 "request_comment TEXT," +
-                "FOREIGN KEY (requester_id) REFERENCES User (id)" +
+                "FOREIGN KEY (requester_id) REFERENCES User (id)," +
+                "UNIQUE(requester_id, start_date, end_date)" +
                 ");";
 
         String createLineTable = "CREATE TABLE Line (" +
