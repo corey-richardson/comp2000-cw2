@@ -258,7 +258,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public static void saveCurrentUser(Context context, Employee employee) {
+    public void saveCurrentUser(Context context, Employee employee) {
         Gson gson = new Gson();
         String employeeJson = gson.toJson(employee);
 
@@ -269,7 +269,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Retrieve Employee from SharedPreferences
-    public static Employee loadCurrentUser(Context context) {
+    public Employee loadCurrentUser(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("CurrentUser", Context.MODE_PRIVATE);
         String employeeJson = sharedPreferences.getString("currentUser", null);
 
@@ -281,7 +281,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return null; // No current user
     }
 
-    public static void clearCurrentUser(Context context) {
+    public void clearCurrentUser(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("CurrentUser", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.remove("currentUser");
@@ -308,5 +308,44 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.close();
             return false;
         }
+    }
+
+    public void updateUserInDatabase(Context context, Employee employee) {
+        DatabaseHelper databaseHelper = DatabaseHelper.getInstance(context);
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+
+        Date startDate = employee.getStart_date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String startDateString = dateFormat.format(startDate);
+
+        // For UPDATEs, use Prepared Statements rather than rawQuery
+        String updateQuery = "UPDATE User SET " +
+                "first_name = ?, " +
+                "last_name = ?, " +
+                "email = ?, " +
+                "phone = ?, " +
+                "address = ?, " +
+                "job_title = ?, " +
+                "start_date = ?, " +
+                "password = ?, " +
+                "role = ?, " +
+                "holiday_allowance = ? " +
+                "WHERE id = ?";
+
+        db.execSQL(updateQuery, new Object[]{
+                employee.getFirst_name(),
+                employee.getLast_name(),
+                employee.getEmail(),
+                employee.getPhone(),
+                employee.getAddress(),
+                employee.getJob_title(),
+                startDateString,
+                employee.getPassword(),
+                employee.getRole(),
+                employee.getHoliday_allowance(),
+                employee.getId()
+        });
+
+        db.close();
     }
 }
