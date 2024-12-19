@@ -1,5 +1,9 @@
 package com.example.employeeapp;
 
+import android.content.Intent;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteConstraintException;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -96,5 +100,32 @@ public class RequestPTO extends AppCompatActivity {
 
         Log.d("DateFormatCheck", ptoStart);
         Log.d("DateFormatCheck", ptoEnd);
+
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+
+        String insertQuery = "INSERT INTO PtoRequest " +
+                "(requester_id, start_date, end_date, status, request_comment) VALUES " +
+                "(?           , ?         , ?       , 'Waiting', ?);";
+
+        try {
+            db.execSQL(insertQuery, new Object[]{
+                    currentUser.getId(), ptoStart, ptoEnd, ptoRequestComment
+            });
+
+            Toast.makeText(this, "Submitted PTO Request.", Toast.LENGTH_SHORT).show();
+
+        } catch (SQLiteConstraintException e) {
+            Toast.makeText(this, "You have already submitted a PTO request for these dates.", Toast.LENGTH_SHORT).show();
+            Log.e("DatabaseError", "Error while submitting PTO request", e);
+            return;
+        } catch (SQLException e) {
+            Toast.makeText(this, "Failed to submit PTO Request.", Toast.LENGTH_SHORT).show();
+            Log.e("DatabaseError", "Error while submitting PTO request", e);
+            return;
+        }
+
+        Intent iLaunchViewHoliday = new Intent(this, ViewHoliday.class);
+        startActivity(iLaunchViewHoliday);
+        finish();
     }
 }
