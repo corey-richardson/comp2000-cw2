@@ -2,29 +2,49 @@ package com.example.employeeapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import android.widget.Button;
-import android.view.View;
 import android.widget.TextView;
-import android.content.Intent;
 
-public class EmployeeDashboard extends AppCompatActivity {
+public class Dashboard extends AppCompatActivity {
+
+    Employee currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_employee_dashboard);
+        setContentView(R.layout.activity_dashboard);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        findViewById(R.id.employeeDetailsButton).setVisibility(View.GONE);
+        findViewById(R.id.employeePtoRequestsButton).setVisibility(View.GONE);
+        findViewById(R.id.addEmployeeButton).setVisibility(View.GONE);
+
+        currentUser = DatabaseHelper.loadCurrentUser(this);
+        TextView employeeNameTextView = findViewById(R.id.employeeName);
+
+        assert currentUser != null;
+        if (currentUser.getRole().equals("Admin")) {
+            findViewById(R.id.employeeDetailsButton).setVisibility(View.VISIBLE);
+            findViewById(R.id.employeePtoRequestsButton).setVisibility(View.VISIBLE);
+            findViewById(R.id.addEmployeeButton).setVisibility(View.VISIBLE);
+            employeeNameTextView.setText(String.format("%s [Admin]", currentUser.getFull_name()));
+        } else {
+            employeeNameTextView.setText(currentUser.getFull_name());
+        }
+
+
+
     }
 
     public void launchEmployeeDetails(View v)
@@ -43,6 +63,24 @@ public class EmployeeDashboard extends AppCompatActivity {
     {
         Intent iLaunchSettings = new Intent(this, Settings.class);
         startActivity(iLaunchSettings);
+    }
+
+    public void launchAEmployeeDetails(View v)
+    {
+        Intent iLaunchAEmployeeDetails = new Intent(this, aEmployeeDetails.class);
+        startActivity(iLaunchAEmployeeDetails);
+    }
+
+    public void launchPtoRequests(View v)
+    {
+        Intent iLaunchPtoRequests = new Intent(this, aPtoRequests.class);
+        startActivity(iLaunchPtoRequests);
+    }
+
+    public void launchAddEmployee(View v)
+    {
+        Intent iLaunchAddEmployee = new Intent(this, aAddEmployee.class);
+        startActivity(iLaunchAddEmployee);
     }
 
     public void handleLogout(View v)

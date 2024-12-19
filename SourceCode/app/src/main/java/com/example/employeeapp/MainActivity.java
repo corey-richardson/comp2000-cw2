@@ -5,14 +5,9 @@ import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-import android.widget.Button;
+
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.util.Log;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -50,14 +45,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         Intent iLaunchHomepage;
-        if (user.getRole().equals("Admin"))
-        {
-            iLaunchHomepage = new Intent(this, AdminDashboard.class);
-        }
-        else {
-            iLaunchHomepage = new Intent(this, EmployeeDashboard.class);
-        }
-
+        iLaunchHomepage = new Intent(this, Dashboard.class);
         startActivity(iLaunchHomepage);
 
     }

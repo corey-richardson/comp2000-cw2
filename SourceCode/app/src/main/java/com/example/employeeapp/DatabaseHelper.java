@@ -17,7 +17,7 @@ import com.google.gson.Gson;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "database.db";
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
 
     private static DatabaseHelper instance;
 
@@ -87,7 +87,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "start_date, password, role, holiday_allowance) " +
                 "VALUES ('Admin', 'User', 'admin@example.com', '1234567890', '123 Admin Street', " +
                 "'System Admin', '2024-01-01', 'admin_password', 'Admin', 30);");
+        db.execSQL("INSERT INTO User (first_name, last_name, email, phone, address, job_title, " +
+                "start_date, password, role, holiday_allowance) " +
+                "VALUES ('John', 'Doe', 'john.doe@example.com', '0987654321', '456 Employee Lane', " +
+                "'Software Engineer', '2024-01-01', 'employee_password', 'Employee', 20);");
 
+        Log.d("onCreate", "onCreate was run.");
 
     }
 
@@ -253,7 +258,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public void saveCurrentUser(Context context, Employee employee) {
+    public static void saveCurrentUser(Context context, Employee employee) {
         Gson gson = new Gson();
         String employeeJson = gson.toJson(employee);
 
@@ -264,7 +269,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Retrieve Employee from SharedPreferences
-    public Employee loadCurrentUser(Context context) {
+    public static Employee loadCurrentUser(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("CurrentUser", Context.MODE_PRIVATE);
         String employeeJson = sharedPreferences.getString("currentUser", null);
 
@@ -276,7 +281,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return null; // No current user
     }
 
-    public void clearCurrentUser(Context context) {
+    public static void clearCurrentUser(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("CurrentUser", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.remove("currentUser");
