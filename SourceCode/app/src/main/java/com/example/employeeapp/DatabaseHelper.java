@@ -108,8 +108,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Helper Queries
     public Employee cursorToEmployee(Cursor cursor) {
-
-        Employee employee = new Employee(
+        return new Employee(
                 cursor.getInt(cursor.getColumnIndexOrThrow("id")),
                 cursor.getString(cursor.getColumnIndexOrThrow("first_name")),
                 cursor.getString(cursor.getColumnIndexOrThrow("last_name")),
@@ -122,42 +121,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 cursor.getInt(cursor.getColumnIndexOrThrow("holiday_allowance")),
                 cursor.getString(cursor.getColumnIndexOrThrow("role"))
         );
-
-        cursor.close();
-        return employee;
     }
 
     public PtoRequest cursorToPtoRequest(Cursor cursor) {
-        // Convert SQLite Date TEXT to Java.Date type
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        String startDateString = cursor.getString(cursor.getColumnIndexOrThrow("start_date"));
-        String endDateString = cursor.getString(cursor.getColumnIndexOrThrow("end_date"));
-
-        Date startDate, endDate;
-        try {
-            startDate = dateFormat.parse(startDateString);
-        } catch (ParseException e) {
-            Log.e("DateParseError", "Couldn't parse " + startDateString + "to a Java.Date object.");
-            startDate = null;
-        }
-        try {
-            endDate = dateFormat.parse(endDateString);
-        } catch (ParseException e) {
-            Log.e("DateParseError", "Couldn't parse " + endDateString + "to a Java.Date object.");
-            endDate = null;
-        }
-
-        PtoRequest ptoRequest = new PtoRequest(
+        return new PtoRequest(
                 cursor.getInt(cursor.getColumnIndexOrThrow("id")),
                 cursor.getInt(cursor.getColumnIndexOrThrow("requester_id")),
                 cursor.getString(cursor.getColumnIndexOrThrow("status")),
-                startDate,
-                endDate,
+                cursor.getString(cursor.getColumnIndexOrThrow("start_date")),
+                cursor.getString(cursor.getColumnIndexOrThrow("end_date")),
                 cursor.getString(cursor.getColumnIndexOrThrow("request_comment"))
         );
-
-        cursor.close();
-        return ptoRequest;
     }
 
     // Common Queries
@@ -183,16 +157,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         List<PtoRequest> ptoRequestList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.rawQuery("SELECT * FROM PtoRequest", null);
+        Cursor cursor = null;
 
-        if (cursor.moveToFirst()) {
-            do {
-                ptoRequestList.add(cursorToPtoRequest(cursor));
-            } while (cursor.moveToNext());
+        try {
+            cursor = db.rawQuery("SELECT * FROM PtoRequest", null);
+            if (cursor.moveToFirst()) {
+                do {
+                    ptoRequestList.add(cursorToPtoRequest(cursor));
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            Log.e("DatabaseError", "Error fetching PTO requests: " + e.getMessage());
+        } finally {
+            if (cursor != null) { cursor.close(); }
+            if (db != null) { db.close(); }
         }
-
-        cursor.close();
-        db.close();
 
         return ptoRequestList;
     }

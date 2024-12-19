@@ -117,13 +117,16 @@ public class RequestPTO extends AppCompatActivity {
         } catch (SQLiteConstraintException e) {
             Toast.makeText(this, "You have already submitted a PTO request for these dates.", Toast.LENGTH_SHORT).show();
             Log.e("DatabaseError", "Error while submitting PTO request", e);
+            db.close();
             return;
         } catch (SQLException e) {
             Toast.makeText(this, "Failed to submit PTO Request.", Toast.LENGTH_SHORT).show();
             Log.e("DatabaseError", "Error while submitting PTO request", e);
+            db.close();
             return;
         }
 
+        db.close();
         Intent iLaunchViewHoliday = new Intent(this, ViewHoliday.class);
         startActivity(iLaunchViewHoliday);
         finish();

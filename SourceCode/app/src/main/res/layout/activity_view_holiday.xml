@@ -27,26 +27,23 @@
         android:fontFamily="sans-serif-medium"
         android:text="My Holiday"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/ptoDashboardLayout"
+        app:layout_constraintBottom_toTopOf="@+id/ptoListView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/employeePfp"
         app:layout_constraintVertical_bias="0.5" />
 
-    <LinearLayout
-        android:id="@+id/ptoDashboardLayout"
+    <ListView
+        android:id="@+id/ptoListView"
         android:layout_width="379dp"
         android:layout_height="350dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/employeeName">
-
-    </LinearLayout>
+        app:layout_constraintTop_toBottomOf="@+id/employeeName" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

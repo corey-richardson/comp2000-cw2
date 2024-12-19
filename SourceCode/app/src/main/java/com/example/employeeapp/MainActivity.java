@@ -22,6 +22,12 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialise databaseHelper
         databaseHelper = DatabaseHelper.getInstance(this);
+
+        EditText editTextEmail = findViewById(R.id.loginScreenEmailField);
+        EditText editTextPassword = findViewById(R.id.loginScreenPasswordField);
+
+        editTextEmail.setText("john.doe@example.com");
+        editTextPassword.setText("employee_password");
     }
 
     public void handleLogin(View v)
