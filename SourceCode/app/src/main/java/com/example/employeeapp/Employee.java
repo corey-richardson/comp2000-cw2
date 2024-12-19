@@ -1,7 +1,14 @@
 package com.example.employeeapp;
 
 import java.util.Date;
+
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import android.widget.Toast;
 
 public class Employee {
     private int id;
@@ -89,4 +96,49 @@ public class Employee {
     public String getRole() {
         return role;
     }
+
+    public void setFirst_name(String first_name) {
+        this.first_name = first_name;
+    }
+
+    public void setLast_name(String last_name) {
+        this.last_name = last_name;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPhone (String phone) {
+        this.phone = phone;
+    }
+
+    public void setAddress(String address) {
+        address = address.replaceAll(",", "");
+        this.address = address;
+    }
+
+    public void setJob_title(String job_title) {
+        this.job_title = job_title;
+    }
+
+    public void setStart_date(Date start_date) {
+        this.start_date = start_date;
+    }
+
+    public void setStart_date(String startDateString) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date startDate = dateFormat.parse(startDateString);
+            setStart_date(startDate);
+        } catch (ParseException e) {
+            Log.e("DateParse", "Failed to parse new Employee Start Date");
+        }
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+
 }

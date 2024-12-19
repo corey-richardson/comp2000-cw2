@@ -14,6 +14,7 @@ import android.widget.TextView;
 public class Dashboard extends AppCompatActivity {
 
     Employee currentUser;
+    DatabaseHelper databaseHelper = DatabaseHelper.getInstance(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +31,7 @@ public class Dashboard extends AppCompatActivity {
         findViewById(R.id.employeePtoRequestsButton).setVisibility(View.GONE);
         findViewById(R.id.addEmployeeButton).setVisibility(View.GONE);
 
-        currentUser = DatabaseHelper.loadCurrentUser(this);
+        currentUser = databaseHelper.loadCurrentUser(this);
         TextView employeeNameTextView = findViewById(R.id.employeeName);
 
         assert currentUser != null;
