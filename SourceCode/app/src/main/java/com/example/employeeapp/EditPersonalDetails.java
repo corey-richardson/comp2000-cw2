@@ -1,12 +1,9 @@
 package com.example.employeeapp;
 
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import java.util.Date;
-import java.text.SimpleDateFormat;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -37,17 +34,13 @@ public class EditPersonalDetails extends AppCompatActivity {
         TextView employeeNameTextView = findViewById(R.id.employeeName);
         employeeNameTextView.setText(currentUser.getFull_name());
 
-        Date startDate = currentUser.getStart_date();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String startDateString = dateFormat.format(startDate);
-
         ((EditText) findViewById(R.id.employeeDetailsFirstNameField)).setText(currentUser.getFirst_name());
         ((EditText) findViewById(R.id.employeeDetailsLastNameField)).setText(currentUser.getLast_name());
         ((EditText) findViewById(R.id.employeeDetailsEmailField)).setText(currentUser.getEmail());
         ((EditText) findViewById(R.id.employeeDetailsPhoneField)).setText(currentUser.getPhone());
         ((EditText) findViewById(R.id.employeeDetailsAddressField)).setText(currentUser.getAddress());
         ((EditText) findViewById(R.id.employeeDetailsJobTitleField)).setText(currentUser.getJob_title());
-        ((EditText) findViewById(R.id.employeeDetailsStartDateField)).setText(startDateString);
+        ((EditText) findViewById(R.id.employeeDetailsStartDateField)).setText(currentUser.getStart_date());
     }
 
     public void handleSaveDetails(View v) {

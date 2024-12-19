@@ -1,14 +1,6 @@
 package com.example.employeeapp;
 
-import java.util.Date;
-
-import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import android.widget.Toast;
 
 public class Employee {
     private int id;
@@ -18,14 +10,14 @@ public class Employee {
     private String phone;
     private String address; // WATCH FOR COMMA SEPARATION
     private String job_title;
-    private Date start_date;
+    private String start_date;
     private String password;
     private int holiday_allowance;
     private String role;
 
     public Employee(int id,
                     String first_name, String last_name, String email, String phone, String address,
-                    String job_title, Date start_date, String password, int holiday_allowance, String role) {
+                    String job_title, String start_date, String password, int holiday_allowance, String role) {
         this.id = id;
         this.first_name = first_name;
         this.last_name = last_name;
@@ -81,7 +73,7 @@ public class Employee {
         return job_title;
     }
 
-    public Date getStart_date() {
+    public String getStart_date() {
         return start_date;
     }
 
@@ -122,18 +114,8 @@ public class Employee {
         this.job_title = job_title;
     }
 
-    public void setStart_date(Date start_date) {
+    public void setStart_date(String start_date) {
         this.start_date = start_date;
-    }
-
-    public void setStart_date(String startDateString) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            Date startDate = dateFormat.parse(startDateString);
-            setStart_date(startDate);
-        } catch (ParseException e) {
-            Log.e("DateParse", "Failed to parse new Employee Start Date");
-        }
     }
 
     public void setPassword(String password) {
