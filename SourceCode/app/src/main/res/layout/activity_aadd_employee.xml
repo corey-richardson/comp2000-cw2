@@ -54,7 +54,14 @@
             android:text="Name" />
 
         <EditText
-            android:id="@+id/employeeDetailsFirstNameField"
+            android:id="@+id/addEmployeeFirstNameField"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:ems="10"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/addEmployeeLastNameField"
             android:layout_width="match_parent"
             android:layout_height="44dp"
             android:ems="10"
@@ -72,7 +79,7 @@
             android:text="Email" />
 
         <EditText
-            android:id="@+id/employeeDetailsEmailField"
+            android:id="@+id/addEmployeeEmailField"
             android:layout_width="match_parent"
             android:layout_height="44dp"
             android:ems="10"
@@ -90,7 +97,7 @@
             android:text="Phone" />
 
         <EditText
-            android:id="@+id/employeeDetailsPhoneField"
+            android:id="@+id/addEmployeePhoneField"
             android:layout_width="match_parent"
             android:layout_height="44dp"
             android:ems="10"
@@ -108,7 +115,7 @@
             android:text="Address" />
 
         <EditText
-            android:id="@+id/employeeDetailsAddressField"
+            android:id="@+id/addEmployeeAddressField"
             android:layout_width="match_parent"
             android:layout_height="44dp"
             android:ems="10"
@@ -127,7 +134,7 @@
             android:text="Job Title" />
 
         <EditText
-            android:id="@+id/employeeDetailsJobTitleField"
+            android:id="@+id/addEmployeeJobTitleField"
             android:layout_width="match_parent"
             android:layout_height="44dp"
             android:ems="10"
@@ -146,7 +153,7 @@
             android:text="Start Date" />
 
         <EditText
-            android:id="@+id/employeeDetailsStartDateField"
+            android:id="@+id/addEmployeeStartDateField"
             android:layout_width="match_parent"
             android:layout_height="44dp"
             android:clickable="false"
@@ -163,6 +170,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="#2196F3"
+            android:onClick="saveNewEmployee"
             android:text="Save Details" />
     </LinearLayout>
 

@@ -390,4 +390,44 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return userSettings;
     }
+
+    public void insertUser(Employee newEmployee) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues userValues = new ContentValues();
+        ContentValues settingsValues = new ContentValues();
+
+        db.beginTransaction();
+        try {
+            userValues.put("first_name", newEmployee.getFirst_name());
+            userValues.put("last_name", newEmployee.getLast_name());
+            userValues.put("email", newEmployee.getEmail());
+            userValues.put("phone", newEmployee.getPhone());
+            userValues.put("address", newEmployee.getAddress());
+            userValues.put("job_title", newEmployee.getJob_title());
+            userValues.put("start_date", newEmployee.getStart_date());
+            userValues.put("password", newEmployee.getPassword());
+            userValues.put("holiday_allowance", newEmployee.getHoliday_allowance());
+            userValues.put("role", newEmployee.getRole());
+
+            long userId = db.insert("User", null, userValues);
+            if (userId == -1) { throw new SQLException("Failed to insert new user."); }
+
+            settingsValues.put("user_id", userId);
+            settingsValues.put("pto_notifications", 1);
+            settingsValues.put("details_notifications", 1);
+            settingsValues.put("dark_theme", 1);
+            settingsValues.put("red_green_theme", 0);
+
+            long settingsId = db.insert("UserSettings", null, settingsValues);
+            if (settingsId == -1) { throw new SQLException("Failed to insert new user's settings."); }
+
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.e("InsertUser", "Failed to insert new user. " + e);
+            throw new SQLException("Failed to insert new user.");
+        } finally {
+            db.endTransaction();
+            db.close();
+        }
+    }
 }
