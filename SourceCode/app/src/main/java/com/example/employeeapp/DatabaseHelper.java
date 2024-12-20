@@ -1,5 +1,6 @@
 package com.example.employeeapp;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -20,7 +21,7 @@ import com.google.gson.Gson;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "database.db";
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 7;
 
     private static DatabaseHelper instance;
 
@@ -55,6 +56,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "role TEXT NOT NULL CHECK (role IN ('Admin', 'Employee'))" +
                 ");";
 
+        String createUserSettingsTable = "CREATE TABLE UserSettings (" +
+                "user_id INTEGER PRIMARY KEY, " +
+                "pto_notifications INTEGER NOT NULL, " +
+                "details_notifications INTEGER NOT NULL, " +
+                "dark_theme INTEGER NOT NULL, " +
+                "red_green_theme INTEGER NOT NULL, " +
+                "FOREIGN KEY (user_id) REFERENCES User (id) " +
+                ");";
+
         String createPtoRequestTable = "CREATE TABLE PtoRequest (" +
                 "id INTEGER PRIMARY KEY," +
                 "requester_id INTEGER NOT NULL," +
@@ -75,6 +85,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         try {
             db.execSQL(createUserTable);
+            db.execSQL(createUserSettingsTable);
             db.execSQL(createPtoRequestTable);
             db.execSQL(createLineTable);
             Log.d("DatabaseCreationSuccess", (DATABASE_NAME + " " + DATABASE_VERSION + " was created."));
@@ -85,6 +96,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE INDEX idx_user_first_name ON User (first_name);");
         db.execSQL("CREATE INDEX idx_user_last_name ON User (last_name);");
         db.execSQL("CREATE INDEX idx_user_email ON User (email);");
+        db.execSQL("CREATE INDEX idx_user_id_settings ON UserSettings (user_id);");
         db.execSQL("CREATE INDEX idx_pto_request_requester ON PtoRequest (requester_id);");
 
         db.execSQL("INSERT INTO User (first_name, last_name, email, phone, address, job_title, " +
@@ -95,6 +107,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "start_date, password, role, holiday_allowance) " +
                 "VALUES ('John', 'Doe', 'john.doe@example.com', '0987654321', '456 Employee Lane', " +
                 "'Software Engineer', '2024-01-01', 'employee_password', 'Employee', 20);");
+        db.execSQL("INSERT INTO UserSettings (user_id, pto_notifications, details_notifications, " +
+                "dark_theme, red_green_theme)" +
+                "VALUES (1, 1, 1, 0, 0);");
+        db.execSQL("INSERT INTO UserSettings (user_id, pto_notifications, details_notifications, " +
+                "dark_theme, red_green_theme)" +
+                "VALUES (2, 1, 1, 1, 0);");
 
         Log.d("onCreate", "onCreate was run.");
 
@@ -103,6 +121,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS User;");
+        db.execSQL("DROP TABLE IF EXISTS UserSettings;");
         db.execSQL("DROP TABLE IF EXISTS PtoRequest;");
         db.execSQL("DROP TABLE IF EXISTS Line;");
 
@@ -327,5 +346,48 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             throw e; // Propagates the error to PtoAdapter::cancelPtoRequest to Toast in context
         }
         // statement automatically manages resources and ensures they are closed after use
+    }
+
+    public void updateUserSettings(int userId, UserSettings userSettings) {
+        ContentValues values = new ContentValues();
+
+        try (SQLiteDatabase db = getWritableDatabase()) {
+            values.put("pto_notifications", userSettings.getPtoNotifications() ? 1 : 0);
+            values.put("details_notifications", userSettings.getDetailsNotifications() ? 1 : 0);
+            values.put("dark_theme", userSettings.getDarkTheme() ? 1 : 0);
+            values.put("red_green_theme", userSettings.getRedGreenTheme() ? 1 : 0);
+
+            db.update("UserSettings", values, "user_id = ?",
+                    new String[]{ Integer.toString(userId) });
+
+            Log.d("UpdateSettings", "SettingsUpdated: " + userId);
+        } catch (Exception e) {
+            Log.e("UpdateUserSettings", "Failed to update settings.");
+        }
+    }
+
+    public UserSettings loadUserSettings(Employee currentUser) {
+        SQLiteDatabase db = getReadableDatabase();
+
+        String query = "SELECT pto_notifications, details_notifications, dark_theme, red_green_theme " +
+                "FROM UserSettings " +
+                "WHERE user_id = ?";
+
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(currentUser.getId())});
+        UserSettings userSettings = null;
+
+        if (cursor.moveToFirst()) {
+            boolean ptoNotifications = cursor.getInt(cursor.getColumnIndex("pto_notifications")) == 1;
+            boolean detailsNotifications = cursor.getInt(cursor.getColumnIndex("details_notifications")) == 1;
+            boolean darkTheme = cursor.getInt(cursor.getColumnIndex("dark_theme")) == 1;
+            boolean redGreenTheme = cursor.getInt(cursor.getColumnIndex("red_green_theme")) == 1;
+
+            userSettings = new UserSettings(ptoNotifications, detailsNotifications, darkTheme, redGreenTheme);
+        }
+
+        cursor.close();
+        db.close();
+
+        return userSettings;
     }
 }
