@@ -14,7 +14,7 @@ import android.widget.TextView;
 public class Dashboard extends AppCompatActivity {
 
     Employee currentUser;
-    DatabaseHelper databaseHelper = DatabaseHelper.getInstance(this);
+    DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +26,8 @@ public class Dashboard extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        databaseHelper = DatabaseHelper.getInstance(this);
 
         findViewById(R.id.employeeDetailsButton).setVisibility(View.GONE);
         findViewById(R.id.employeePtoRequestsButton).setVisibility(View.GONE);

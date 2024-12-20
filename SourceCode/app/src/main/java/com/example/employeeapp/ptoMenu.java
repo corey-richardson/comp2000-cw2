@@ -14,7 +14,7 @@ import android.widget.TextView;
 public class ptoMenu extends AppCompatActivity {
 
     Employee currentUser;
-    DatabaseHelper databaseHelper = DatabaseHelper.getInstance(this);
+    DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +27,7 @@ public class ptoMenu extends AppCompatActivity {
             return insets;
         });
 
+        databaseHelper = DatabaseHelper.getInstance(this);
         currentUser = databaseHelper.loadCurrentUser(this);
 
         TextView employeeNameTextView = findViewById(R.id.employeeName);
