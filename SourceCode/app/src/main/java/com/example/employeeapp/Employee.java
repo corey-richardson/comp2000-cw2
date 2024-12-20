@@ -1,5 +1,8 @@
 package com.example.employeeapp;
 
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 public class Employee {
@@ -14,10 +17,12 @@ public class Employee {
     private String password;
     private int holiday_allowance;
     private String role;
+    private UserSettings userSettings;
 
-    public Employee(int id,
+    public Employee( int id,
                     String first_name, String last_name, String email, String phone, String address,
-                    String job_title, String start_date, String password, int holiday_allowance, String role) {
+                    String job_title, String start_date, String password, int holiday_allowance,
+                    String role) {
         this.id = id;
         this.first_name = first_name;
         this.last_name = last_name;
@@ -89,6 +94,8 @@ public class Employee {
         return role;
     }
 
+    public UserSettings getUserSettings() { return userSettings; }
+
     public void setFirst_name(String first_name) {
         this.first_name = first_name;
     }
@@ -121,6 +128,4 @@ public class Employee {
     public void setPassword(String password) {
         this.password = password;
     }
-
-
 }
