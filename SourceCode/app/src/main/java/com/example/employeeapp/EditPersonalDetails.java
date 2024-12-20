@@ -14,8 +14,8 @@ import android.content.Intent;
 
 public class EditPersonalDetails extends AppCompatActivity {
 
+    DatabaseHelper databaseHelper;
     Employee currentUser;
-    DatabaseHelper databaseHelper = DatabaseHelper.getInstance(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +28,7 @@ public class EditPersonalDetails extends AppCompatActivity {
             return insets;
         });
 
-
+        databaseHelper = DatabaseHelper.getInstance(this);
         currentUser = databaseHelper.loadCurrentUser(this);
 
         TextView employeeNameTextView = findViewById(R.id.employeeName);

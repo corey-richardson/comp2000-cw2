@@ -26,48 +26,48 @@ public class Settings extends AppCompatActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
 
-            databaseHelper = DatabaseHelper.getInstance(this);
-            currentUser = databaseHelper.loadCurrentUser(this);
-            UserSettings currentUserUserSettings = databaseHelper.loadUserSettings(currentUser);
-
-            TextView employeeName = findViewById(R.id.employeeNameSettings);
-            employeeName.setText(currentUser .getFull_name());
-
-            Switch ptoRequestsSwitch = findViewById(R.id.switchPtoRequests);
-            Switch detailsUpdatedSwitch = findViewById(R.id.switchDetailsUpdated);
-            Switch darkThemeSwitch = findViewById(R.id.switchDarkMode);
-            Switch redGreenThemeSwitch = findViewById(R.id.switchRedGreenColourblind);
-
-            ptoRequestsSwitch.setChecked(currentUserUserSettings.getPtoNotifications());
-            detailsUpdatedSwitch.setChecked(currentUserUserSettings.getDetailsNotifications());
-            darkThemeSwitch.setChecked(currentUserUserSettings.getDarkTheme());
-            redGreenThemeSwitch.setChecked(currentUserUserSettings.getRedGreenTheme());
-
-            ptoRequestsSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                currentUserUserSettings.setPtoNotifications(isChecked);
-                databaseHelper.updateUserSettings(currentUser.getId(), currentUserUserSettings);
-                Log.d("UpdateSettings", "ptoRequestsSwitch");
-            });
-
-            detailsUpdatedSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                currentUserUserSettings.setDetailsNotifications(isChecked);
-                databaseHelper.updateUserSettings(currentUser.getId(), currentUserUserSettings);
-                Log.d("UpdateSettings", "detailsUpdatedSwitch");
-            });
-
-            darkThemeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                currentUserUserSettings.setDarkTheme(isChecked);
-                databaseHelper.updateUserSettings(currentUser.getId(), currentUserUserSettings);
-                Log.d("UpdateSettings", "darkThemeSwitch");
-            });
-
-            redGreenThemeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                currentUserUserSettings.setRedGreenTheme(isChecked);
-                databaseHelper.updateUserSettings(currentUser.getId(), currentUserUserSettings);
-                Log.d("UpdateSettings", "redGreenThemeSwitch");
-            });
-
             return insets;
+        });
+
+        databaseHelper = DatabaseHelper.getInstance(this);
+        currentUser = databaseHelper.loadCurrentUser(this);
+        UserSettings currentUserUserSettings = databaseHelper.loadUserSettings(currentUser);
+
+        TextView employeeName = findViewById(R.id.employeeNameSettings);
+        employeeName.setText(currentUser .getFull_name());
+
+        Switch ptoRequestsSwitch = findViewById(R.id.switchPtoRequests);
+        Switch detailsUpdatedSwitch = findViewById(R.id.switchDetailsUpdated);
+        Switch darkThemeSwitch = findViewById(R.id.switchDarkMode);
+        Switch redGreenThemeSwitch = findViewById(R.id.switchRedGreenColourblind);
+
+        ptoRequestsSwitch.setChecked(currentUserUserSettings.getPtoNotifications());
+        detailsUpdatedSwitch.setChecked(currentUserUserSettings.getDetailsNotifications());
+        darkThemeSwitch.setChecked(currentUserUserSettings.getDarkTheme());
+        redGreenThemeSwitch.setChecked(currentUserUserSettings.getRedGreenTheme());
+
+        ptoRequestsSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            currentUserUserSettings.setPtoNotifications(isChecked);
+            databaseHelper.updateUserSettings(currentUser.getId(), currentUserUserSettings);
+            Log.d("UpdateSettings", "ptoRequestsSwitch");
+        });
+
+        detailsUpdatedSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            currentUserUserSettings.setDetailsNotifications(isChecked);
+            databaseHelper.updateUserSettings(currentUser.getId(), currentUserUserSettings);
+            Log.d("UpdateSettings", "detailsUpdatedSwitch");
+        });
+
+        darkThemeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            currentUserUserSettings.setDarkTheme(isChecked);
+            databaseHelper.updateUserSettings(currentUser.getId(), currentUserUserSettings);
+            Log.d("UpdateSettings", "darkThemeSwitch");
+        });
+
+        redGreenThemeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            currentUserUserSettings.setRedGreenTheme(isChecked);
+            databaseHelper.updateUserSettings(currentUser.getId(), currentUserUserSettings);
+            Log.d("UpdateSettings", "redGreenThemeSwitch");
         });
     }
 }
