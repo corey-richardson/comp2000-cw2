@@ -3,6 +3,7 @@ package com.example.employeeapp;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.SQLException;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
@@ -28,7 +29,7 @@ public class EditPtoRequest extends AppCompatActivity {
 
     Employee currentUser;
     DatabaseHelper databaseHelper;
-    TextView startDateEditDatetime, endDateEditDatetime;
+    TextView ptoEditStartDatetime, ptoEditEndDatetime;
     TextView commentEditText;
     int ptoRequestId;
 
@@ -44,8 +45,8 @@ public class EditPtoRequest extends AppCompatActivity {
             databaseHelper = DatabaseHelper.getInstance(this);
             currentUser = databaseHelper.loadCurrentUser(this);
 
-            startDateEditDatetime = findViewById(R.id.ptoEditStartDatetime);
-            endDateEditDatetime = findViewById(R.id.ptoEditEndDatetime);
+            ptoEditStartDatetime = findViewById(R.id.ptoEditStartDatetime);
+            ptoEditEndDatetime = findViewById(R.id.ptoEditEndDatetime);
             commentEditText = findViewById(R.id.ptoEditAddInfo);
 
             Intent intent = getIntent();
@@ -54,12 +55,12 @@ public class EditPtoRequest extends AppCompatActivity {
             String endDate = intent.getStringExtra("endDate");
             String requestComment = intent.getStringExtra("requestComment");
 
-            startDateEditDatetime.setText(startDate);
-            endDateEditDatetime.setText(endDate);
+            ptoEditStartDatetime.setText(startDate);
+            ptoEditEndDatetime.setText(endDate);
             commentEditText.setText(requestComment);
 
-            startDateEditDatetime.setOnClickListener(view -> showDatePickerDialog(true));
-            endDateEditDatetime.setOnClickListener(view -> showDatePickerDialog(false));
+            ptoEditStartDatetime.setOnClickListener(view -> showDatePickerDialog(true));
+            ptoEditEndDatetime.setOnClickListener(view -> showDatePickerDialog(false));
 
             return insets;
         });
@@ -86,9 +87,9 @@ public class EditPtoRequest extends AppCompatActivity {
                 String formattedDateTime = dateFormat.format(calendar.getTime());
 
                 if (isStartDate) {
-                    startDateEditDatetime.setText(formattedDateTime);
+                    ptoEditStartDatetime.setText(formattedDateTime);
                 } else {
-                    endDateEditDatetime.setText(formattedDateTime);
+                    ptoEditEndDatetime.setText(formattedDateTime);
                 }
             }
 
@@ -101,8 +102,8 @@ public class EditPtoRequest extends AppCompatActivity {
     }
 
     public void handleSubmit(View v) {
-        String startDate = startDateEditDatetime.getText().toString().trim();
-        String endDate = endDateEditDatetime.getText().toString().trim();
+        String startDate = ptoEditStartDatetime.getText().toString().trim();
+        String endDate = ptoEditEndDatetime.getText().toString().trim();
         String requestComment = commentEditText.getText().toString().trim();
 
         ContentValues values = new ContentValues();
@@ -114,8 +115,13 @@ public class EditPtoRequest extends AppCompatActivity {
             db.update("PtoRequest", values, "id = ?", new String[]{ Integer.toString(ptoRequestId)} );
             Toast.makeText(this, "Updated PTO Request.", Toast.LENGTH_SHORT).show();
         } catch (SQLException e) {
-            Log.e("EditPtoRequest", "Error editing PTO Request ", e);
-            Toast.makeText(this, "Failed to edit PTO Request.", Toast.LENGTH_SHORT).show();
+            if (e instanceof SQLiteConstraintException) {
+                Toast.makeText(this, "You have already submitted a PTO request for these dates.", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Failed to submit PTO Request.", Toast.LENGTH_SHORT).show();
+            }
+            Log.e("DatabaseError", "Error while submitting PTO request", e);
+            return;
         }
 
         Intent iLaunchViewHoliday = new Intent(this, ViewHoliday.class);

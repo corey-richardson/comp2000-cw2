@@ -1,5 +1,6 @@
 package com.example.employeeapp;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteConstraintException;
@@ -28,10 +29,10 @@ import android.widget.Toast;
 public class RequestPTO extends AppCompatActivity {
 
     Employee currentUser;
-    DatabaseHelper databaseHelper = DatabaseHelper.getInstance(this);
+    DatabaseHelper databaseHelper;
 
-    private TextView ptoStartDatetime;
-    private TextView ptoEndDatetime;
+    TextView ptoStartDatetime, ptoEndDatetime;
+    TextView ptoCommentText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +45,12 @@ public class RequestPTO extends AppCompatActivity {
             return insets;
         });
 
+        databaseHelper = DatabaseHelper.getInstance(this);
         currentUser = databaseHelper.loadCurrentUser(this);
 
         ptoStartDatetime = findViewById(R.id.ptoStartDatetime);
         ptoEndDatetime = findViewById(R.id.ptoEndDatetime);
+        ptoCommentText = findViewById(R.id.ptoAddInfo);
 
         ptoStartDatetime.setOnClickListener(view -> showDatePickerDialog(true));
         ptoEndDatetime.setOnClickListener(view -> showDatePickerDialog(false));
@@ -92,41 +95,38 @@ public class RequestPTO extends AppCompatActivity {
     }
 
     public void handleSubmit(View v) {
-        EditText ptoRequestCommentField = findViewById(R.id.ptoAddInfo);
+        String startDate = ptoStartDatetime.getText().toString().trim();
+        String endDate = ptoEndDatetime.getText().toString().trim();
+        String requestComment = ptoCommentText.getText().toString().trim();
 
-        String ptoStart = ptoStartDatetime.getText().toString().trim();
-        String ptoEnd = ptoEndDatetime.getText().toString().trim();
-        String ptoRequestComment = ptoRequestCommentField.getText().toString().trim();
+        ContentValues values = new ContentValues();
+        values.put("requester_id", currentUser.getId());
+        values.put("start_date", startDate);
+        values.put("end_date", endDate);
+        values.put("status", "Waiting");
+        values.put("request_comment", requestComment);
 
-        Log.d("DateFormatCheck", ptoStart);
-        Log.d("DateFormatCheck", ptoEnd);
+        try (SQLiteDatabase db = databaseHelper.getWritableDatabase()) {
+            long result = db.insert("PtoRequest", null, values);
+            Log.e("RequestPTO", Long.toString(result));
 
-        SQLiteDatabase db = databaseHelper.getWritableDatabase();
-
-        String insertQuery = "INSERT INTO PtoRequest " +
-                "(requester_id, start_date, end_date, status, request_comment) VALUES " +
-                "(?           , ?         , ?       , 'Waiting', ?);";
-
-        try {
-            db.execSQL(insertQuery, new Object[]{
-                    currentUser.getId(), ptoStart, ptoEnd, ptoRequestComment
-            });
+            if (result == -1) {
+                Toast.makeText(this, "Failed to submit PTO Request.", Toast.LENGTH_SHORT).show();
+                // throw new SQLiteConstraintException("Possible duplicate PTO request for these dates; manually thrown!");
+                return;
+            }
 
             Toast.makeText(this, "Submitted PTO Request.", Toast.LENGTH_SHORT).show();
-
-        } catch (SQLiteConstraintException e) {
-            Toast.makeText(this, "You have already submitted a PTO request for these dates.", Toast.LENGTH_SHORT).show();
-            Log.e("DatabaseError", "Error while submitting PTO request", e);
-            db.close();
-            return;
         } catch (SQLException e) {
-            Toast.makeText(this, "Failed to submit PTO Request.", Toast.LENGTH_SHORT).show();
+            if (e instanceof SQLiteConstraintException) {
+                Toast.makeText(this, "You have already submitted a PTO request for these dates.", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Failed to submit PTO Request.", Toast.LENGTH_SHORT).show();
+            }
             Log.e("DatabaseError", "Error while submitting PTO request", e);
-            db.close();
             return;
         }
 
-        db.close();
         Intent iLaunchViewHoliday = new Intent(this, ViewHoliday.class);
         startActivity(iLaunchViewHoliday);
         finish();
