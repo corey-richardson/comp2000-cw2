@@ -2,6 +2,7 @@ package com.example.employeeapp;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.SQLException;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -85,7 +86,7 @@ public class PtoAdapter extends BaseAdapter {
         }
 
         cancelButton.setOnClickListener(v -> {
-            
+
             // https://developer.android.com/develop/ui/views/components/dialogs
             AlertDialog.Builder confirmDeletion = new AlertDialog.Builder(context);
             confirmDeletion.setMessage("Confirm cancellation?");
@@ -106,6 +107,15 @@ public class PtoAdapter extends BaseAdapter {
             });
 
             confirmDeletion.show();
+        });
+
+        editButton.setOnClickListener(v -> {
+            Intent iLaunchEditPtoRequest = new Intent(context, EditPtoRequest.class);
+            iLaunchEditPtoRequest.putExtra("ptoRequestId", ptoRequest.getId());
+            iLaunchEditPtoRequest.putExtra("startDate", ptoRequest.getStart_date());
+            iLaunchEditPtoRequest.putExtra("endDate", ptoRequest.getEnd_date());
+            iLaunchEditPtoRequest.putExtra("requestComment", ptoRequest.getRequest_comment());
+            context.startActivity(iLaunchEditPtoRequest);
         });
 
         return convertView;
