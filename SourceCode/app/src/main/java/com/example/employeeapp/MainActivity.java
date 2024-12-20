@@ -26,8 +26,8 @@ public class MainActivity extends AppCompatActivity {
         EditText editTextEmail = findViewById(R.id.loginScreenEmailField);
         EditText editTextPassword = findViewById(R.id.loginScreenPasswordField);
 
-        editTextEmail.setText("john.doe@example.com");
-        editTextPassword.setText("employee_password");
+        editTextEmail.setText("admin@example.com");
+        editTextPassword.setText("admin_password");
     }
 
     public void handleLogin(View v)

@@ -42,28 +42,28 @@ public class EditPtoRequest extends AppCompatActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
 
-            databaseHelper = DatabaseHelper.getInstance(this);
-            currentUser = databaseHelper.loadCurrentUser(this);
-
-            ptoEditStartDatetime = findViewById(R.id.ptoEditStartDatetime);
-            ptoEditEndDatetime = findViewById(R.id.ptoEditEndDatetime);
-            commentEditText = findViewById(R.id.ptoEditAddInfo);
-
-            Intent intent = getIntent();
-            ptoRequestId = intent.getIntExtra("ptoRequestId", -1); // defaults -1
-            String startDate = intent.getStringExtra("startDate");
-            String endDate = intent.getStringExtra("endDate");
-            String requestComment = intent.getStringExtra("requestComment");
-
-            ptoEditStartDatetime.setText(startDate);
-            ptoEditEndDatetime.setText(endDate);
-            commentEditText.setText(requestComment);
-
-            ptoEditStartDatetime.setOnClickListener(view -> showDatePickerDialog(true));
-            ptoEditEndDatetime.setOnClickListener(view -> showDatePickerDialog(false));
-
             return insets;
         });
+
+        databaseHelper = DatabaseHelper.getInstance(this);
+        currentUser = databaseHelper.loadCurrentUser(this);
+
+        ptoEditStartDatetime = findViewById(R.id.ptoEditStartDatetime);
+        ptoEditEndDatetime = findViewById(R.id.ptoEditEndDatetime);
+        commentEditText = findViewById(R.id.ptoEditAddInfo);
+
+        Intent intent = getIntent();
+        ptoRequestId = intent.getIntExtra("ptoRequestId", -1); // defaults -1
+        String startDate = intent.getStringExtra("startDate");
+        String endDate = intent.getStringExtra("endDate");
+        String requestComment = intent.getStringExtra("requestComment");
+
+        ptoEditStartDatetime.setText(startDate);
+        ptoEditEndDatetime.setText(endDate);
+        commentEditText.setText(requestComment);
+
+        ptoEditStartDatetime.setOnClickListener(view -> showDatePickerDialog(true));
+        ptoEditEndDatetime.setOnClickListener(view -> showDatePickerDialog(false));
     }
 
     private void showDatePickerDialog(final boolean isStartDate) {
