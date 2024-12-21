@@ -13,7 +13,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 
 import org.json.JSONObject;
 
@@ -96,6 +95,7 @@ public class ApiService {
                             @Override
                             public void onResponse(JSONObject response) {
                                 Toast.makeText(context, "Success!", Toast.LENGTH_SHORT).show();
+                                Log.d("Response", response.toString());
                             }
                         },
                         new Response.ErrorListener() {
