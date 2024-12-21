@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -28,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
 
         editTextEmail.setText("admin@example.com");
         editTextPassword.setText("admin_password");
+
+        ApiService.apiHealthCheck(this);
     }
 
     public void handleLogin(View v)

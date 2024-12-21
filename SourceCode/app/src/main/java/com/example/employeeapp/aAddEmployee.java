@@ -33,6 +33,7 @@ public class aAddEmployee extends AppCompatActivity {
         currentUser = databaseHelper.loadCurrentUser(this);
     }
 
+
     public void saveNewEmployee(View v) {
         String firstName = ((EditText) findViewById(R.id.addEmployeeFirstNameField)).getText().toString().trim();
         String lastName = ((EditText) findViewById(R.id.addEmployeeLastNameField)).getText().toString().trim();
@@ -45,6 +46,7 @@ public class aAddEmployee extends AppCompatActivity {
         Employee newEmployee = new Employee(-1, firstName, lastName, email, department,
                 salary, startDate, 30, "new_starter_password", "Employee");
 
+        // Save the new employee LOCALLY
         try {
             databaseHelper.insertUser(newEmployee);
             Toast.makeText(this, "Added new employee to database.", Toast.LENGTH_SHORT).show();
@@ -56,5 +58,11 @@ public class aAddEmployee extends AppCompatActivity {
         }
 
         // NOW USE THE API
+        try {
+            ApiService.apiInsertUser(this, newEmployee);
+            Toast.makeText(this, "Uploaded via API!", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Toast.makeText(this, "Failed to upload the employee via the API.", Toast.LENGTH_SHORT).show();
+        }
     }
 }
