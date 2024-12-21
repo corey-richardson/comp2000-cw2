@@ -7,15 +7,15 @@ import android.util.Log;
 
 public class Employee {
     private int id;
-    private String first_name;
-    private String last_name;
+    private String firstName;
+    private String lastName;
     private String email;
     private String phone;
     private String address; // WATCH FOR COMMA SEPARATION
-    private String job_title;
-    private String start_date;
+    private String jobTitle;
+    private String startDate;
     private String password;
-    private int holiday_allowance;
+    private int holidayAllowance;
     private String role;
     private UserSettings userSettings;
 
@@ -24,42 +24,42 @@ public class Employee {
                     String job_title, String start_date, String password, int holiday_allowance,
                     String role) {
         this.id = id;
-        this.first_name = first_name;
-        this.last_name = last_name;
+        this.firstName = first_name;
+        this.lastName = last_name;
         this.email = email;
         this.phone = phone;
         this.address = address;
-        this.job_title = job_title;
-        this.start_date = start_date;
+        this.jobTitle = job_title;
+        this.startDate = start_date;
         this.password = password;
         this.role = role;
 
         if (holiday_allowance < 0) {
-            this.holiday_allowance = 0;
+            this.holidayAllowance = 0;
         } else {
-            this.holiday_allowance = holiday_allowance;
+            this.holidayAllowance = holiday_allowance;
         }
     }
 
     public void repr()
     {
-        Log.i("EmployeeRepr", first_name + " " + last_name);
+        Log.i("EmployeeRepr", firstName + " " + lastName);
     }
 
     public int getId() {
         return id;
     }
 
-    public String getFirst_name() {
-        return first_name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public String getLast_name() {
-        return last_name;
+    public String getLastName() {
+        return lastName;
     }
 
-    public String getFull_name() {
-        return first_name + " " + last_name;
+    public String getFullName() {
+        return firstName + " " + lastName;
     }
 
     public String getEmail() {
@@ -75,19 +75,19 @@ public class Employee {
     }
 
     public String getJob_title() {
-        return job_title;
+        return jobTitle;
     }
 
     public String getStart_date() {
-        return start_date;
+        return startDate;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public int getHoliday_allowance() {
-        return holiday_allowance;
+    public int getHolidayAllowance() {
+        return holidayAllowance;
     }
 
     public String getRole() {
@@ -96,12 +96,12 @@ public class Employee {
 
     public UserSettings getUserSettings() { return userSettings; }
 
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
+    public void setFirstName(String first_name) {
+        this.firstName = first_name;
     }
 
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
+    public void setLastName(String last_name) {
+        this.lastName = last_name;
     }
 
     public void setEmail(String email) {
@@ -117,12 +117,12 @@ public class Employee {
         this.address = address;
     }
 
-    public void setJob_title(String job_title) {
-        this.job_title = job_title;
+    public void setJobTitle(String job_title) {
+        this.jobTitle = job_title;
     }
 
-    public void setStart_date(String start_date) {
-        this.start_date = start_date;
+    public void setStartDate(String start_date) {
+        this.startDate = start_date;
     }
 
     public void setPassword(String password) {

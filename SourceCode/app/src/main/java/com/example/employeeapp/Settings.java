@@ -7,7 +7,6 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -34,7 +33,7 @@ public class Settings extends AppCompatActivity {
         UserSettings currentUserUserSettings = databaseHelper.loadUserSettings(currentUser);
 
         TextView employeeName = findViewById(R.id.employeeNameSettings);
-        employeeName.setText(currentUser .getFull_name());
+        employeeName.setText(currentUser .getFullName());
 
         Switch ptoRequestsSwitch = findViewById(R.id.switchPtoRequests);
         Switch detailsUpdatedSwitch = findViewById(R.id.switchDetailsUpdated);

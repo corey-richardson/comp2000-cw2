@@ -8,7 +8,7 @@ public class UserSettings {
 
     public UserSettings(boolean ptoNotifications, boolean detailsNotifications, boolean darkTheme, boolean redGreenTheme) {
         this.ptoNotifications = ptoNotifications;
-        this.detailsNotifications = ptoNotifications;
+        this.detailsNotifications = detailsNotifications;
         this.darkTheme = darkTheme;
         this.redGreenTheme = redGreenTheme;
     }
