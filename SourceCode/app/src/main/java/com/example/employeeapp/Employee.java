@@ -20,17 +20,17 @@ public class Employee {
     private UserSettings userSettings;
 
     public Employee( int id,
-                    String first_name, String last_name, String email, String phone, String address,
-                    String job_title, String start_date, String password, int holiday_allowance,
+                    String firstName, String lastName, String email, String phone, String address,
+                    String jobTitle, String startDate, String password, int holiday_allowance,
                     String role) {
         this.id = id;
-        this.firstName = first_name;
-        this.lastName = last_name;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.phone = phone;
         this.address = address;
-        this.jobTitle = job_title;
-        this.startDate = start_date;
+        this.jobTitle = jobTitle;
+        this.startDate = startDate;
         this.password = password;
         this.role = role;
 
