@@ -8,5 +8,30 @@
     tools:context=".aEmployeeDetails">
 
 
+    <TextView
+        android:id="@+id/viewEmployeesLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="152dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="Employees"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@id/employeeListView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.006"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.4" />
+
+    <ListView
+        android:id="@+id/employeeListView"
+        android:layout_width="419dp"
+        android:layout_height="740dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/viewEmployeesLabel"
+        app:layout_constraintVertical_bias="0.5" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
