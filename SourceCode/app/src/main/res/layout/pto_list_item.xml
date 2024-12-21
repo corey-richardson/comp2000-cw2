@@ -32,6 +32,19 @@
         android:ellipsize="end"
         android:maxLines="1" />
 
+    <!-- Comment Text -->
+    <TextView
+        android:id="@+id/pto_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Comment"
+        android:textSize="16sp"
+        android:textColor="#DEDEDE"
+        android:layout_marginTop="4dp"
+        android:ellipsize="end"
+        android:maxLines="10"
+        android:scrollHorizontally="false"/>
+
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"

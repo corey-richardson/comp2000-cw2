@@ -57,6 +57,7 @@ public class PtoAdapter extends BaseAdapter {
         String ptoDateRange = context.getString(R.string.pto_request_dates, ptoRequest.getStartDate(), ptoRequest.getEndDate());
         TextView ptoDateRangeTextField = convertView.findViewById(R.id.pto_start_end_date);
         TextView ptoStatusTextField = convertView.findViewById(R.id.pto_status);
+        TextView ptoCommentTextField = convertView.findViewById(R.id.pto_comment);
 
         Button cancelButton = convertView.findViewById(R.id.cancel_button);
         Button editButton = convertView.findViewById(R.id.edit_button);
@@ -64,6 +65,7 @@ public class PtoAdapter extends BaseAdapter {
 
         ptoDateRangeTextField.setText(ptoDateRange);
         ptoStatusTextField.setText(ptoRequest.getStatus());
+        ptoCommentTextField.setText(ptoRequest.getRequestComment());
 
         switch (ptoRequest.getStatus()) {
             case "Approved":
