@@ -13,11 +13,14 @@ import android.content.SharedPreferences;
 import com.google.gson.Gson;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
+
+    // Class attributes
     private static final String DATABASE_NAME = "database.db";
     private static final int DATABASE_VERSION = 8;
-
     private static DatabaseHelper instance;
 
+
+    // Constructor
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -33,6 +36,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return instance;
     }
 
+
+    // Database Creation and Upgrade methods
     @Override
     public void onCreate(SQLiteDatabase db) {
         String createUserTable = "CREATE TABLE User (" +
@@ -120,7 +125,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    // Helper Queries
+
+    // Helper Methods for Mapping Cursors to Objects
     public Employee cursorToEmployee(Cursor cursor) {
         return new Employee(
                 cursor.getInt(cursor.getColumnIndexOrThrow("id")),
@@ -147,7 +153,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         );
     }
 
-    // Common Queries
+
+    // Read Methods
     public List<Employee> getAllEmployees() {
         List<Employee> employeeList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -233,6 +240,110 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+
+    // Create Methods
+    public void insertUser(Employee newEmployee) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues userValues = new ContentValues();
+        ContentValues settingsValues = new ContentValues();
+
+        db.beginTransaction();
+        try {
+            userValues.put("first_name", newEmployee.getFirstName());
+            userValues.put("last_name", newEmployee.getLastName());
+            userValues.put("email", newEmployee.getEmail());
+            userValues.put("department", newEmployee.getDepartment()); // New field
+            userValues.put("salary", newEmployee.getSalary()); // New field
+            userValues.put("start_date", newEmployee.getStartDate());
+            userValues.put("holiday_allowance", newEmployee.getHolidayAllowance());
+            userValues.put("password", newEmployee.getPassword());
+            userValues.put("role", newEmployee.getRole());
+
+            long userId = db.insert("User", null, userValues);
+            if (userId == -1) {
+                throw new SQLException("Failed to insert new user.");
+            }
+
+            settingsValues.put("user_id", userId);
+            settingsValues.put("pto_notifications", 1);
+            settingsValues.put("details_notifications", 1);
+            settingsValues.put("dark_theme", 1);
+            settingsValues.put("red_green_theme", 0);
+
+            long settingsId = db.insert("UserSettings", null, settingsValues);
+            if (settingsId == -1) { throw new SQLException("Failed to insert new user's settings."); }
+
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.e("InsertUser", "Failed to insert new user. " + e);
+            throw new SQLException("Failed to insert new user.");
+        } finally {
+            db.endTransaction();
+            db.close();
+        }
+    }
+
+
+    // Update Methods
+    public void updateUserInDatabase(Context context, Employee employee) {
+        ContentValues values = new ContentValues();
+        values.put("first_name", employee.getFirstName());
+        values.put("last_name", employee.getLastName());
+        values.put("email", employee.getEmail());
+        values.put("department", employee.getDepartment());
+        values.put("salary", employee.getSalary());
+        values.put("start_date", employee.getStartDate());
+        values.put("holiday_allowance", employee.getHolidayAllowance());
+        values.put("password", employee.getPassword());
+        values.put("role", employee.getRole());
+
+        try (SQLiteDatabase db = getWritableDatabase()) {
+            db.update("User", values, "id = ?",
+                    new String[]{ Integer.toString(employee.getId()) });
+        } catch (SQLException e) {
+            Log.e("DatabaseHelper", "Error updating employee details.");
+            throw e;
+        }
+    }
+
+
+    // Delete Methods
+    // https://www.geeksforgeeks.org/how-to-delete-data-in-sqlite-database-in-android/
+    public void deletePtoRequest(int id) {
+
+        try (SQLiteDatabase db = getWritableDatabase()) { // AndroidStudio suggested this \_O_/
+            db.delete("PtoRequest", "id = ?", new String[]{Integer.toString(id)});
+        } catch (SQLException e) {
+            Log.e("DatabaseHelper", "Error deleting PTO request " + id, e);
+            throw e; // Propagates the error to PtoAdapter::cancelPtoRequest to Toast in context
+        }
+        // statement automatically manages resources and ensures they are closed after use
+    }
+
+
+    // Authentication and User Management Methods
+    // Writes user to SharedPreferences if exists in database
+    public boolean authenticateUser(Context context, String email, String password) {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM User WHERE email = ? AND password = ?",
+                new String[]{ email, password });
+
+        if (cursor != null && cursor.moveToFirst()) {
+            Employee employee = cursorToEmployee(cursor);
+            saveCurrentUser(context, employee);
+
+            Log.d("Login", "Login Succeeded, " + employee.getFullName() + ".");
+            cursor.close();
+            db.close();
+            return true;
+        } else {
+            Log.d("Login", "Login Failed, User doesn't exist.");
+            if (cursor != null) { cursor.close(); }
+            db.close();
+            return false;
+        }
+    }
+
     public void saveCurrentUser(Context context, Employee employee) {
         Gson gson = new Gson();
         String employeeJson = gson.toJson(employee);
@@ -263,80 +374,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         editor.apply();
     }
 
-    // Writes user to SharedPreferences if exists in database
-    public boolean authenticateUser(Context context, String email, String password) {
-        SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM User WHERE email = ? AND password = ?",
-                new String[]{ email, password });
 
-        if (cursor != null && cursor.moveToFirst()) {
-            Employee employee = cursorToEmployee(cursor);
-            saveCurrentUser(context, employee);
-
-            Log.d("Login", "Login Succeeded, " + employee.getFullName() + ".");
-            cursor.close();
-            db.close();
-            return true;
-        } else {
-            Log.d("Login", "Login Failed, User doesn't exist.");
-            if (cursor != null) { cursor.close(); }
-            db.close();
-            return false;
-        }
-    }
-
-    public void updateUserInDatabase(Context context, Employee employee) {
-        ContentValues values = new ContentValues();
-        values.put("first_name", employee.getFirstName());
-        values.put("last_name", employee.getLastName());
-        values.put("email", employee.getEmail());
-        values.put("department", employee.getDepartment());
-        values.put("salary", employee.getSalary());
-        values.put("start_date", employee.getStartDate());
-        values.put("holiday_allowance", employee.getHolidayAllowance());
-        values.put("password", employee.getPassword());
-        values.put("role", employee.getRole());
-
-        try (SQLiteDatabase db = getWritableDatabase()) {
-            db.update("User", values, "id = ?",
-                    new String[]{ Integer.toString(employee.getId()) });
-        } catch (SQLException e) {
-            Log.e("DatabaseHelper", "Error updating employee details.");
-            throw e;
-        }
-
-    }
-
-    // https://www.geeksforgeeks.org/how-to-delete-data-in-sqlite-database-in-android/
-    public void deletePtoRequest(int id) {
-
-        try (SQLiteDatabase db = getWritableDatabase()) { // AndroidStudio suggested this \_O_/
-            db.delete("PtoRequest", "id = ?", new String[]{Integer.toString(id)});
-        } catch (SQLException e) {
-            Log.e("DatabaseHelper", "Error deleting PTO request " + id, e);
-            throw e; // Propagates the error to PtoAdapter::cancelPtoRequest to Toast in context
-        }
-        // statement automatically manages resources and ensures they are closed after use
-    }
-
-    public void updateUserSettings(int userId, UserSettings userSettings) {
-        ContentValues values = new ContentValues();
-
-        try (SQLiteDatabase db = getWritableDatabase()) {
-            values.put("pto_notifications", userSettings.getPtoNotifications() ? 1 : 0);
-            values.put("details_notifications", userSettings.getDetailsNotifications() ? 1 : 0);
-            values.put("dark_theme", userSettings.getDarkTheme() ? 1 : 0);
-            values.put("red_green_theme", userSettings.getRedGreenTheme() ? 1 : 0);
-
-            db.update("UserSettings", values, "user_id = ?",
-                    new String[]{ Integer.toString(userId) });
-
-            Log.d("UpdateSettings", "SettingsUpdated: " + userId);
-        } catch (Exception e) {
-            Log.e("UpdateUserSettings", "Failed to update settings.");
-        }
-    }
-
+    // User Settings Methods
     public UserSettings loadUserSettings(Employee currentUser) {
 
         UserSettings userSettings = null;
@@ -377,44 +416,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return userSettings;
     }
 
-    public void insertUser(Employee newEmployee) {
-        SQLiteDatabase db = getWritableDatabase();
-        ContentValues userValues = new ContentValues();
-        ContentValues settingsValues = new ContentValues();
+    public void updateUserSettings(int userId, UserSettings userSettings) {
+        ContentValues values = new ContentValues();
 
-        db.beginTransaction();
-        try {
-            userValues.put("first_name", newEmployee.getFirstName());
-            userValues.put("last_name", newEmployee.getLastName());
-            userValues.put("email", newEmployee.getEmail());
-            userValues.put("department", newEmployee.getDepartment()); // New field
-            userValues.put("salary", newEmployee.getSalary()); // New field
-            userValues.put("start_date", newEmployee.getStartDate());
-            userValues.put("holiday_allowance", newEmployee.getHolidayAllowance());
-            userValues.put("password", newEmployee.getPassword());
-            userValues.put("role", newEmployee.getRole());
+        try (SQLiteDatabase db = getWritableDatabase()) {
+            values.put("pto_notifications", userSettings.getPtoNotifications() ? 1 : 0);
+            values.put("details_notifications", userSettings.getDetailsNotifications() ? 1 : 0);
+            values.put("dark_theme", userSettings.getDarkTheme() ? 1 : 0);
+            values.put("red_green_theme", userSettings.getRedGreenTheme() ? 1 : 0);
 
-            long userId = db.insert("User", null, userValues);
-            if (userId == -1) {
-                throw new SQLException("Failed to insert new user.");
-            }
+            db.update("UserSettings", values, "user_id = ?",
+                    new String[]{ Integer.toString(userId) });
 
-            settingsValues.put("user_id", userId);
-            settingsValues.put("pto_notifications", 1);
-            settingsValues.put("details_notifications", 1);
-            settingsValues.put("dark_theme", 1);
-            settingsValues.put("red_green_theme", 0);
-
-            long settingsId = db.insert("UserSettings", null, settingsValues);
-            if (settingsId == -1) { throw new SQLException("Failed to insert new user's settings."); }
-
-            db.setTransactionSuccessful();
+            Log.d("UpdateSettings", "SettingsUpdated: " + userId);
         } catch (Exception e) {
-            Log.e("InsertUser", "Failed to insert new user. " + e);
-            throw new SQLException("Failed to insert new user.");
-        } finally {
-            db.endTransaction();
-            db.close();
+            Log.e("UpdateUserSettings", "Failed to update settings.");
         }
     }
 }
