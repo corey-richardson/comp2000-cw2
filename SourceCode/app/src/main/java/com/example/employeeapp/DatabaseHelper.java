@@ -9,8 +9,12 @@ import android.util.Log;
 import android.database.Cursor;
 import java.util.ArrayList;
 import java.util.List;
+
 import android.content.SharedPreferences;
+
 import com.google.gson.Gson;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
