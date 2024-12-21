@@ -37,24 +37,21 @@ public class EditPersonalDetails extends AppCompatActivity {
         ((EditText) findViewById(R.id.employeeDetailsFirstNameField)).setText(currentUser.getFirstName());
         ((EditText) findViewById(R.id.employeeDetailsLastNameField)).setText(currentUser.getLastName());
         ((EditText) findViewById(R.id.employeeDetailsEmailField)).setText(currentUser.getEmail());
-        ((EditText) findViewById(R.id.employeeDetailsPhoneField)).setText(currentUser.getPhone());
-        ((EditText) findViewById(R.id.employeeDetailsAddressField)).setText(currentUser.getAddress());
-        ((EditText) findViewById(R.id.employeeDetailsJobTitleField)).setText(currentUser.getJob_title());
-        ((EditText) findViewById(R.id.employeeDetailsStartDateField)).setText(currentUser.getStart_date());
+        ((EditText) findViewById(R.id.employeeDetailsDepartmentField)).setText(currentUser.getDepartment());
+        ((EditText) findViewById(R.id.employeeDetailsSalaryField)).setText(getString(R.string.salary_string, currentUser.getSalary()));
+        ((EditText) findViewById(R.id.employeeDetailsStartDateField)).setText(currentUser.getStartDate());
     }
 
     public void handleSaveDetails(View v) {
         String firstName = ((EditText) findViewById(R.id.employeeDetailsFirstNameField)).getText().toString().trim();
         String lastName = ((EditText) findViewById(R.id.employeeDetailsLastNameField)).getText().toString().trim();
         String email = ((EditText) findViewById(R.id.employeeDetailsEmailField)).getText().toString().trim();
-        String phone = ((EditText) findViewById(R.id.employeeDetailsPhoneField)).getText().toString().trim();
-        String address = ((EditText) findViewById(R.id.employeeDetailsAddressField)).getText().toString().trim();
 
         // Not editable:
         // currentUser.setJob_title(((EditText) findViewById(R.id.employeeDetailsJobTitleField)).getText().toString().trim());
         // currentUser.setStart_date(((EditText) findViewById(R.id.employeeDetailsStartDateField)).getText().toString().trim());
 
-        if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || phone.isEmpty() || address.isEmpty()) {
+        if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty()) {
             Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -62,8 +59,6 @@ public class EditPersonalDetails extends AppCompatActivity {
         currentUser.setFirstName(firstName);
         currentUser.setLastName(lastName);
         currentUser.setEmail(email);
-        currentUser.setPhone(phone);
-        currentUser.setAddress(address);
 
         // Update currentUser details saved in SharedPreferences and SQL Database to persist
         databaseHelper.saveCurrentUser(this, currentUser);

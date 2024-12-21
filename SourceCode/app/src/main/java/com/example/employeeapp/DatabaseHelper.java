@@ -14,7 +14,7 @@ import com.google.gson.Gson;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "database.db";
-    private static final int DATABASE_VERSION = 7;
+    private static final int DATABASE_VERSION = 8;
 
     private static DatabaseHelper instance;
 
@@ -40,12 +40,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "first_name TEXT NOT NULL," +
                 "last_name TEXT NOT NULL," +
                 "email TEXT UNIQUE NOT NULL," +
-                "phone TEXT UNIQUE NOT NULL," +
-                "address TEXT NOT NULL," +
-                "job_title TEXT NOT NULL," +
+                "department TEXT NOT NULL," +
+                "salary REAL NOT NULL CHECK (salary > 0) DEFAULT 0," +
                 "start_date TEXT NOT NULL," + // YYYY-MM-DD
-                "password TEXT NOT NULL," +
                 "holiday_allowance INT NOT NULL CHECK (holiday_allowance > 0) DEFAULT 0," +
+                "password TEXT NOT NULL," +
                 "role TEXT NOT NULL CHECK (role IN ('Admin', 'Employee'))" +
                 ");";
 
@@ -92,14 +91,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE INDEX idx_user_id_settings ON UserSettings (user_id);");
         db.execSQL("CREATE INDEX idx_pto_request_requester ON PtoRequest (requester_id);");
 
-        db.execSQL("INSERT INTO User (first_name, last_name, email, phone, address, job_title, " +
-                "start_date, password, role, holiday_allowance) " +
-                "VALUES ('Admin', 'User', 'admin@example.com', '1234567890', '123 Admin Street', " +
-                "'System Admin', '2024-01-01', 'admin_password', 'Admin', 30);");
-        db.execSQL("INSERT INTO User (first_name, last_name, email, phone, address, job_title, " +
-                "start_date, password, role, holiday_allowance) " +
-                "VALUES ('John', 'Doe', 'john.doe@example.com', '0987654321', '456 Employee Lane', " +
-                "'Software Engineer', '2024-01-01', 'employee_password', 'Employee', 20);");
+        db.execSQL("INSERT INTO User (first_name, last_name, email, department, salary, start_date, " +
+                "holiday_allowance, password, role) " +
+                "VALUES ('Admin', 'User', 'admin@example.com', 'IT', 60000.00, '2024-01-01', 30, " +
+                "'admin_password', 'Admin');");
+        db.execSQL("INSERT INTO User (first_name, last_name, email, department, salary, start_date, " +
+                "holiday_allowance, password, role) " +
+                "VALUES ('John', 'Doe', 'john.doe@example.com', 'Engineering', 50000.00, '2024-01-01', " +
+                "20, 'employee_password', 'Employee');");
+
         db.execSQL("INSERT INTO UserSettings (user_id, pto_notifications, details_notifications, " +
                 "dark_theme, red_green_theme)" +
                 "VALUES (1, 1, 1, 0, 0);");
@@ -108,7 +108,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "VALUES (2, 1, 1, 1, 0);");
 
         Log.d("onCreate", "onCreate was run.");
-
     }
 
     @Override
@@ -128,12 +127,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 cursor.getString(cursor.getColumnIndexOrThrow("first_name")),
                 cursor.getString(cursor.getColumnIndexOrThrow("last_name")),
                 cursor.getString(cursor.getColumnIndexOrThrow("email")),
-                cursor.getString(cursor.getColumnIndexOrThrow("phone")),
-                cursor.getString(cursor.getColumnIndexOrThrow("address")),
-                cursor.getString(cursor.getColumnIndexOrThrow("job_title")),
+                cursor.getString(cursor.getColumnIndexOrThrow("department")),
+                cursor.getFloat(cursor.getColumnIndexOrThrow("salary")),
                 cursor.getString(cursor.getColumnIndexOrThrow("start_date")),
-                cursor.getString(cursor.getColumnIndexOrThrow("password")),
                 cursor.getInt(cursor.getColumnIndexOrThrow("holiday_allowance")),
+                cursor.getString(cursor.getColumnIndexOrThrow("password")),
                 cursor.getString(cursor.getColumnIndexOrThrow("role"))
         );
     }
@@ -288,38 +286,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void updateUserInDatabase(Context context, Employee employee) {
-        DatabaseHelper databaseHelper = DatabaseHelper.getInstance(context);
-        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("first_name", employee.getFirstName());
+        values.put("last_name", employee.getLastName());
+        values.put("email", employee.getEmail());
+        values.put("department", employee.getDepartment());
+        values.put("salary", employee.getSalary());
+        values.put("start_date", employee.getStartDate());
+        values.put("holiday_allowance", employee.getHolidayAllowance());
+        values.put("password", employee.getPassword());
+        values.put("role", employee.getRole());
 
-        // For UPDATEs, use Prepared Statements rather than rawQuery
-        String updateQuery = "UPDATE User SET " +
-                "first_name = ?, " +
-                "last_name = ?, " +
-                "email = ?, " +
-                "phone = ?, " +
-                "address = ?, " +
-                "job_title = ?, " +
-                "start_date = ?, " +
-                "password = ?, " +
-                "role = ?, " +
-                "holiday_allowance = ? " +
-                "WHERE id = ?";
+        try (SQLiteDatabase db = getWritableDatabase()) {
+            db.update("User", values, "id = ?",
+                    new String[]{ Integer.toString(employee.getId()) });
+        } catch (SQLException e) {
+            Log.e("DatabaseHelper", "Error updating employee details.");
+            throw e;
+        }
 
-        db.execSQL(updateQuery, new Object[]{
-                employee.getFirstName(),
-                employee.getLastName(),
-                employee.getEmail(),
-                employee.getPhone(),
-                employee.getAddress(),
-                employee.getJob_title(),
-                employee.getStart_date(),
-                employee.getPassword(),
-                employee.getRole(),
-                employee.getHolidayAllowance(),
-                employee.getId()
-        });
-
-        db.close();
     }
 
     // https://www.geeksforgeeks.org/how-to-delete-data-in-sqlite-database-in-android/
@@ -402,16 +387,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             userValues.put("first_name", newEmployee.getFirstName());
             userValues.put("last_name", newEmployee.getLastName());
             userValues.put("email", newEmployee.getEmail());
-            userValues.put("phone", newEmployee.getPhone());
-            userValues.put("address", newEmployee.getAddress());
-            userValues.put("job_title", newEmployee.getJob_title());
-            userValues.put("start_date", newEmployee.getStart_date());
-            userValues.put("password", newEmployee.getPassword());
+            userValues.put("department", newEmployee.getDepartment()); // New field
+            userValues.put("salary", newEmployee.getSalary()); // New field
+            userValues.put("start_date", newEmployee.getStartDate());
             userValues.put("holiday_allowance", newEmployee.getHolidayAllowance());
+            userValues.put("password", newEmployee.getPassword());
             userValues.put("role", newEmployee.getRole());
 
             long userId = db.insert("User", null, userValues);
-            if (userId == -1) { throw new SQLException("Failed to insert new user."); }
+            if (userId == -1) {
+                throw new SQLException("Failed to insert new user.");
+            }
 
             settingsValues.put("user_id", userId);
             settingsValues.put("pto_notifications", 1);

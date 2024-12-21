@@ -44,4 +44,5 @@
     </string>
 
     <string name="pto_request_dates">%1$s to %2$s</string>
+    <string name="salary_string">£%.2f</string>
 </resources>
