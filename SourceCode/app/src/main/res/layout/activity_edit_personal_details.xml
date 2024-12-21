@@ -94,32 +94,16 @@
             android:id="@+id/loginScreenEmailLabel5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Phone" />
+            android:text="Department" />
 
         <EditText
-            android:id="@+id/employeeDetailsPhoneField"
+            android:id="@+id/employeeDetailsDepartmentField"
             android:layout_width="match_parent"
             android:layout_height="44dp"
+            android:clickable="false"
+            android:focusable="false"
             android:ems="10"
             android:inputType="phone" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="16dp"
-            tools:layout_editor_absoluteY="48dp" />
-
-        <TextView
-            android:id="@+id/loginScreenEmailLabel6"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Address" />
-
-        <EditText
-            android:id="@+id/employeeDetailsAddressField"
-            android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:ems="10"
-            android:inputType="text|textPostalAddress" />
 
         <Space
             android:layout_width="match_parent"
@@ -131,16 +115,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="false"
-            android:text="Job Title" />
+            android:text="Salary" />
 
         <EditText
-            android:id="@+id/employeeDetailsJobTitleField"
+            android:id="@+id/employeeDetailsSalaryField"
             android:layout_width="match_parent"
             android:layout_height="44dp"
             android:clickable="false"
-            android:focusable="false"
             android:ems="10"
-            android:inputType="text" />
+            android:focusable="false"
+            android:inputType="number|numberDecimal" />
 
         <Space
             android:layout_width="match_parent"

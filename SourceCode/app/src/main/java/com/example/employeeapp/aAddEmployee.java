@@ -37,15 +37,13 @@ public class aAddEmployee extends AppCompatActivity {
         String firstName = ((EditText) findViewById(R.id.addEmployeeFirstNameField)).getText().toString().trim();
         String lastName = ((EditText) findViewById(R.id.addEmployeeLastNameField)).getText().toString().trim();
         String email = ((EditText) findViewById(R.id.addEmployeeEmailField)).getText().toString().trim();
-        String phone = ((EditText) findViewById(R.id.addEmployeePhoneField)).getText().toString().trim();
-        String address = ((EditText) findViewById(R.id.addEmployeeAddressField)).getText().toString().trim();
-        String jobTitle = ((EditText) findViewById(R.id.addEmployeeJobTitleField)).getText().toString().trim();
-        // String department = ((EditText) findViewById(R.id.addEmployeeDepartmentField)).getText().toString().trim();
-        // Float salary = ((EditText) findViewById(R.id.addEmployeeSalaryField)).getText().toString().trim();
+        String department = ((EditText) findViewById(R.id.addEmployeeDepartmentField)).getText().toString().trim();
+        String salaryString = ((EditText) findViewById(R.id.addEmployeeSalaryField)).getText().toString().trim();
+        float salary = Float.parseFloat(salaryString);
         String startDate = ((EditText) findViewById(R.id.addEmployeeStartDateField)).getText().toString().trim();
 
-        Employee newEmployee = new Employee(-1, firstName, lastName, email, phone, address,
-                jobTitle, startDate, "new_starter_password", 30, "Employee");
+        Employee newEmployee = new Employee(-1, firstName, lastName, email, department,
+                salary, startDate, 30, "new_starter_password", "Employee");
 
         try {
             databaseHelper.insertUser(newEmployee);

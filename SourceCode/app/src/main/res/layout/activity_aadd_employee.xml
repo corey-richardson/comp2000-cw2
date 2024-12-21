@@ -58,14 +58,14 @@
             android:layout_width="match_parent"
             android:layout_height="44dp"
             android:ems="10"
-            android:inputType="text" />
+            android:inputType="text|textCapWords" />
 
         <EditText
             android:id="@+id/addEmployeeLastNameField"
             android:layout_width="match_parent"
             android:layout_height="44dp"
             android:ems="10"
-            android:inputType="text" />
+            android:inputType="text|textCapWords" />
 
         <Space
             android:layout_width="match_parent"
@@ -94,14 +94,14 @@
             android:id="@+id/loginScreenEmailLabel5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Phone" />
+            android:text="Department" />
 
         <EditText
-            android:id="@+id/addEmployeePhoneField"
+            android:id="@+id/addEmployeeDepartmentField"
             android:layout_width="match_parent"
             android:layout_height="44dp"
             android:ems="10"
-            android:inputType="phone" />
+            android:inputType="text|textCapWords" />
 
         <Space
             android:layout_width="match_parent"
@@ -112,33 +112,19 @@
             android:id="@+id/loginScreenEmailLabel6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Address" />
+            android:text="Salary" />
 
         <EditText
-            android:id="@+id/addEmployeeAddressField"
+            android:id="@+id/addEmployeeSalaryField"
             android:layout_width="match_parent"
             android:layout_height="44dp"
             android:ems="10"
-            android:inputType="text|textPostalAddress" />
+            android:inputType="number|numberDecimal" />
 
         <Space
             android:layout_width="match_parent"
             android:layout_height="16dp"
             tools:layout_editor_absoluteY="48dp" />
-
-        <TextView
-            android:id="@+id/loginScreenJobTitleLabel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="false"
-            android:text="Job Title" />
-
-        <EditText
-            android:id="@+id/addEmployeeJobTitleField"
-            android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:ems="10"
-            android:inputType="text" />
 
         <Space
             android:layout_width="match_parent"
