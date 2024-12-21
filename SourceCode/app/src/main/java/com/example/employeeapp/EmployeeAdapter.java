@@ -1,12 +1,15 @@
 package com.example.employeeapp;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -60,6 +63,33 @@ public class EmployeeAdapter extends BaseAdapter {
         emailTextView.setText(employee.getEmail());
         departmentTextView.setText(employee.getDepartment());
         additionalInfoTextView.setText(additionalInfo);
+
+        deleteButton.setOnClickListener(v -> {
+            AlertDialog.Builder confirmDeletion = new AlertDialog.Builder(context);
+            confirmDeletion.setMessage("Confirm deletion?");
+            confirmDeletion.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    try {
+                        databaseHelper.deleteEmployee(employee.getId());
+                    } catch (Exception e) {
+                        Toast.makeText(context, "Failed to delete Employee", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    employeeList.remove(position);
+                    notifyDataSetChanged(); // Refreshes ListView
+                    Toast.makeText(context, "Deleted Employee", Toast.LENGTH_SHORT).show();
+                }
+            });
+            confirmDeletion.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+
+            confirmDeletion.show();
+        });
 
         return convertView;
     }

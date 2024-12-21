@@ -95,7 +95,11 @@ public class PtoAdapter extends BaseAdapter {
             confirmDeletion.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    cancelPtoRequest(ptoRequest);
+                    try {
+                        databaseHelper.deletePtoRequest(ptoRequest.getId());
+                    } catch (SQLException e) { // Propagated from DatabaseHelper::deletePtoRequest to UI Layer
+                        Toast.makeText(context, "Failed to cancel PTO request,", Toast.LENGTH_SHORT).show();
+                    }
                     ptoRequestList.remove(position);
                     notifyDataSetChanged(); // Refreshes ListView
                     Toast.makeText(context, "Cancelled PTO Request.", Toast.LENGTH_SHORT).show();
@@ -121,13 +125,5 @@ public class PtoAdapter extends BaseAdapter {
         });
 
         return convertView;
-    }
-
-    private void cancelPtoRequest(PtoRequest ptoRequest) {
-        try {
-            databaseHelper.deletePtoRequest(ptoRequest.getId());
-        } catch (SQLException e) { // Propagated from DatabaseHelper::deletePtoRequest to UI Layer
-            Toast.makeText(context, "Failed to cancel PTO request,", Toast.LENGTH_SHORT).show();
-        }
     }
 }

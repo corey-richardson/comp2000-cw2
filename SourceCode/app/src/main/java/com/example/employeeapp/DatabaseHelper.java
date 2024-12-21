@@ -324,6 +324,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // statement automatically manages resources and ensures they are closed after use
     }
 
+    public void deleteEmployee(int id) {
+        try (SQLiteDatabase db = getWritableDatabase()) { // AndroidStudio suggested this \_O_/
+            db.delete("User", "id = ?", new String[]{Integer.toString(id)});
+        } catch (SQLException e) {
+            Log.e("DatabaseHelper", "Error deleting employee " + id, e);
+            throw e; // Propagates the error to PtoAdapter::cancelPtoRequest to Toast in context
+        }
+    }
+
 
     // Authentication and User Management Methods
     // Writes user to SharedPreferences if exists in database
