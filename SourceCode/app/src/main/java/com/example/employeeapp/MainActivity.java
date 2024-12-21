@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
         editTextPassword.setText("admin_password");
 
         ApiService.apiHealthCheck(this);
+        ApiService.fetchAndStoreEmployees(this);
     }
 
     public void handleLogin(View v)
@@ -56,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         Intent iLaunchHomepage;
         iLaunchHomepage = new Intent(this, Dashboard.class);
         startActivity(iLaunchHomepage);
-
+        finish();
     }
 
     public void launchForgotPassword(View v)

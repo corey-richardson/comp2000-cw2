@@ -13,14 +13,12 @@ import java.util.List;
 import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Class attributes
     private static final String DATABASE_NAME = "database.db";
-    private static final int DATABASE_VERSION = 8;
+    private static final int DATABASE_VERSION = 10;
     private static DatabaseHelper instance;
 
 
@@ -177,6 +175,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return employeeList;
     }
 
+    public Employee getEmployeeById(int userId) {
+        Employee employee = null;
+        Cursor cursor = null;
+        try (SQLiteDatabase db = getReadableDatabase()) {
+            cursor = db.rawQuery("SELECT * FROM User WHERE id = ?", new String[]{ Integer.toString(userId) });
+            employee = cursorToEmployee(cursor);
+            return employee;
+        } catch (Exception e) {
+            return null;
+        } finally {
+            if (cursor != null) { cursor.close(); }
+        }
+    }
+
     public List<PtoRequest> getAllPtoRequests() {
         List<PtoRequest> ptoRequestList = new ArrayList<>();
 
@@ -197,7 +209,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         List<PtoRequest> ptoRequestList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.rawQuery("SELECT * FROM PtoRequest WHERE id = ?",
+        Cursor cursor = db.rawQuery("SELECT * FROM PtoRequest WHERE requester_id = ?",
                 new String[]{Integer.toString(requesterId)});
 
         if (cursor.moveToFirst()) {
@@ -253,6 +265,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.beginTransaction();
         try {
+
+            userValues.put("id", newEmployee.getId());
             userValues.put("first_name", newEmployee.getFirstName());
             userValues.put("last_name", newEmployee.getLastName());
             userValues.put("email", newEmployee.getEmail());
@@ -279,7 +293,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             db.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e("InsertUser", "Failed to insert new user. " + e);
+            Log.e("InsertUser", "Failed to insert new user. ");
             throw new SQLException("Failed to insert new user.");
         } finally {
             db.endTransaction();
@@ -327,6 +341,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void deleteEmployee(int id) {
         try (SQLiteDatabase db = getWritableDatabase()) { // AndroidStudio suggested this \_O_/
             db.delete("User", "id = ?", new String[]{Integer.toString(id)});
+            db.delete("UserSettings", "user_id = ?", new String[]{Integer.toString(id)});
         } catch (SQLException e) {
             Log.e("DatabaseHelper", "Error deleting employee " + id, e);
             throw e; // Propagates the error to PtoAdapter::cancelPtoRequest to Toast in context

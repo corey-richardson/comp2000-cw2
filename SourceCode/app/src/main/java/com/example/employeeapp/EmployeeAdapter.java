@@ -59,7 +59,7 @@ public class EmployeeAdapter extends BaseAdapter {
         Button deleteButton = convertView.findViewById(R.id.delete_employee_button);
         Button editButton = convertView.findViewById(R.id.edit_employee_button);
 
-        fullNameTextView.setText(employee.getFullName());
+        fullNameTextView.setText(employee.getFullName() + " " + employee.getId());
         emailTextView.setText(employee.getEmail());
         departmentTextView.setText(employee.getDepartment());
         additionalInfoTextView.setText(additionalInfo);
@@ -90,6 +90,8 @@ public class EmployeeAdapter extends BaseAdapter {
 
             confirmDeletion.show();
         });
+
+        // TO ADD: editButton OnClickListener
 
         return convertView;
     }
