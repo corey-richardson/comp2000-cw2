@@ -7,16 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import android.database.Cursor;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
 import java.util.List;
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.widget.Toast;
-
 import com.google.gson.Gson;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -177,12 +170,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public List<PtoRequest> getAllPtoRequests() {
         List<PtoRequest> ptoRequestList = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = null;
-
-        try {
-            cursor = db.rawQuery("SELECT * FROM PtoRequest", null);
+        try (SQLiteDatabase db = this.getReadableDatabase(); Cursor cursor = db.rawQuery("SELECT * FROM PtoRequest", null)) {
             if (cursor.moveToFirst()) {
                 do {
                     ptoRequestList.add(cursorToPtoRequest(cursor));
@@ -190,9 +179,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
         } catch (Exception e) {
             Log.e("DatabaseError", "Error fetching PTO requests: " + e.getMessage());
-        } finally {
-            if (cursor != null) { cursor.close(); }
-            if (db != null) { db.close(); }
         }
 
         return ptoRequestList;
@@ -289,13 +275,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Employee employee = cursorToEmployee(cursor);
             saveCurrentUser(context, employee);
 
-            Log.d("Login", "Login Succeeded, " + employee.getFull_name() + ".");
+            Log.d("Login", "Login Succeeded, " + employee.getFullName() + ".");
             cursor.close();
             db.close();
             return true;
         } else {
             Log.d("Login", "Login Failed, User doesn't exist.");
-            cursor.close();
+            if (cursor != null) { cursor.close(); }
             db.close();
             return false;
         }
@@ -320,8 +306,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "WHERE id = ?";
 
         db.execSQL(updateQuery, new Object[]{
-                employee.getFirst_name(),
-                employee.getLast_name(),
+                employee.getFirstName(),
+                employee.getLastName(),
                 employee.getEmail(),
                 employee.getPhone(),
                 employee.getAddress(),
@@ -329,7 +315,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 employee.getStart_date(),
                 employee.getPassword(),
                 employee.getRole(),
-                employee.getHoliday_allowance(),
+                employee.getHolidayAllowance(),
                 employee.getId()
         });
 
@@ -367,26 +353,41 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public UserSettings loadUserSettings(Employee currentUser) {
-        SQLiteDatabase db = getReadableDatabase();
 
-        String query = "SELECT pto_notifications, details_notifications, dark_theme, red_green_theme " +
-                "FROM UserSettings " +
-                "WHERE user_id = ?";
-
-        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(currentUser.getId())});
         UserSettings userSettings = null;
+        Cursor cursor = null;
 
-        if (cursor.moveToFirst()) {
-            boolean ptoNotifications = cursor.getInt(cursor.getColumnIndex("pto_notifications")) == 1;
-            boolean detailsNotifications = cursor.getInt(cursor.getColumnIndex("details_notifications")) == 1;
-            boolean darkTheme = cursor.getInt(cursor.getColumnIndex("dark_theme")) == 1;
-            boolean redGreenTheme = cursor.getInt(cursor.getColumnIndex("red_green_theme")) == 1;
+        try (SQLiteDatabase db = getReadableDatabase()) {
+            String query = "SELECT pto_notifications, details_notifications, dark_theme, red_green_theme " +
+                    "FROM UserSettings " +
+                    "WHERE user_id = ?";
 
-            userSettings = new UserSettings(ptoNotifications, detailsNotifications, darkTheme, redGreenTheme);
+            cursor = db.rawQuery(query, new String[]{Integer.toString(currentUser.getId())});
+
+            if (cursor != null && cursor.moveToFirst()) {
+                int ptoIndex = cursor.getColumnIndex("pto_notifications");
+                int detailsIndex = cursor.getColumnIndex("details_notifications");
+                int darkThemeIndex = cursor.getColumnIndex("dark_theme");
+                int redGreenIndex = cursor.getColumnIndex("red_green_theme");
+
+                if (ptoIndex >= 0 && detailsIndex >= 0 && darkThemeIndex >= 0 && redGreenIndex >= 0) {
+                    boolean ptoNotifications = cursor.getInt(ptoIndex) == 1;
+                    boolean detailsNotifications = cursor.getInt(detailsIndex) == 1;
+                    boolean darkTheme = cursor.getInt(darkThemeIndex) == 1;
+                    boolean redGreenTheme = cursor.getInt(redGreenIndex) == 1;
+
+                    userSettings = new UserSettings(ptoNotifications, detailsNotifications, darkTheme, redGreenTheme);
+                }
+            } else {
+                throw new Exception("A UserSettings column was missing.");
+            }
+        } catch (Exception e) {
+            // Return defaults
+            Log.e("LoadUserSettings", "A UserSettings column was missing.");
+            return new UserSettings(true, true, true, false);
+        } finally {
+            if (cursor != null) { cursor.close(); }
         }
-
-        cursor.close();
-        db.close();
 
         return userSettings;
     }
@@ -398,15 +399,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.beginTransaction();
         try {
-            userValues.put("first_name", newEmployee.getFirst_name());
-            userValues.put("last_name", newEmployee.getLast_name());
+            userValues.put("first_name", newEmployee.getFirstName());
+            userValues.put("last_name", newEmployee.getLastName());
             userValues.put("email", newEmployee.getEmail());
             userValues.put("phone", newEmployee.getPhone());
             userValues.put("address", newEmployee.getAddress());
             userValues.put("job_title", newEmployee.getJob_title());
             userValues.put("start_date", newEmployee.getStart_date());
             userValues.put("password", newEmployee.getPassword());
-            userValues.put("holiday_allowance", newEmployee.getHoliday_allowance());
+            userValues.put("holiday_allowance", newEmployee.getHolidayAllowance());
             userValues.put("role", newEmployee.getRole());
 
             long userId = db.insert("User", null, userValues);

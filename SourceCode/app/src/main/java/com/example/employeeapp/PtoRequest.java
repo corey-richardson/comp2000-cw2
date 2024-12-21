@@ -3,44 +3,44 @@ package com.example.employeeapp;
 import android.util.Log;
 
 public class PtoRequest {
-    private int id;
-    private int requester_id;
-    private String status;
-    private String start_date;
-    private String end_date;
-    private String request_comment;
+    private final int id;
+    private final int requesterId;
+    private final String status;
+    private final String startDate;
+    private final String endDate;
+    private final String requestComment;
 
-    public PtoRequest(int id, int requester_id, String status, String start_date,
-                      String end_date, String request_comment) {
+    public PtoRequest(int id, int requesterId, String status, String startDate,
+                      String endDate, String requestComment) {
         this.id = id;
-        this.requester_id = requester_id;
+        this.requesterId = requesterId;
         this.status = status;
-        this.start_date = start_date;
-        this.end_date = end_date;
-        this.request_comment = request_comment;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.requestComment = requestComment;
     }
 
     public int getId() {
         return id;
     }
 
-    public int getRequester_id() {
-        return requester_id;
+    public int getRequesterId() {
+        return requesterId;
     }
 
     public String getStatus() {
         return status;
     }
 
-    public String getStart_date() {
-        return start_date;
+    public String getStartDate() {
+        return startDate;
     }
 
-    public String getEnd_date() {
-        return end_date;
+    public String getEndDate() {
+        return endDate;
     }
 
-    public String getRequest_comment() {
-        return request_comment;
+    public String getRequestComment() {
+        return requestComment;
     }
 }

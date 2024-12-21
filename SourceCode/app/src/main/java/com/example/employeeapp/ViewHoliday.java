@@ -16,8 +16,8 @@ import android.util.Log;
 
 public class ViewHoliday extends AppCompatActivity {
 
-    Employee currentUser;
     DatabaseHelper databaseHelper;
+    Employee currentUser;
     PtoAdapter ptoAdapter;
     ListView ptoListView;
 

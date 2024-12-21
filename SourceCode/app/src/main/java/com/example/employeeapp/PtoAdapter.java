@@ -20,9 +20,9 @@ import java.util.List;
 
 public class PtoAdapter extends BaseAdapter {
 
-    private DatabaseHelper databaseHelper;
-    private Context context;
-    private List<PtoRequest> ptoRequestList;
+    private final DatabaseHelper databaseHelper;
+    private final Context context;
+    private final List<PtoRequest> ptoRequestList;
 
     public PtoAdapter(Context context, List<PtoRequest> ptoRequestList) {
         this.context = context;
@@ -49,12 +49,12 @@ public class PtoAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.pto_list_item, null);
+            convertView = inflater.inflate(R.layout.pto_list_item, parent, false);
         }
 
         PtoRequest ptoRequest = ptoRequestList.get(position);
 
-        String ptoDateRange = context.getString(R.string.pto_request_dates, ptoRequest.getStart_date(), ptoRequest.getEnd_date());
+        String ptoDateRange = context.getString(R.string.pto_request_dates, ptoRequest.getStartDate(), ptoRequest.getEndDate());
         TextView ptoDateRangeTextField = convertView.findViewById(R.id.pto_start_end_date);
         TextView ptoStatusTextField = convertView.findViewById(R.id.pto_status);
 
@@ -112,9 +112,9 @@ public class PtoAdapter extends BaseAdapter {
         editButton.setOnClickListener(v -> {
             Intent iLaunchEditPtoRequest = new Intent(context, EditPtoRequest.class);
             iLaunchEditPtoRequest.putExtra("ptoRequestId", ptoRequest.getId());
-            iLaunchEditPtoRequest.putExtra("startDate", ptoRequest.getStart_date());
-            iLaunchEditPtoRequest.putExtra("endDate", ptoRequest.getEnd_date());
-            iLaunchEditPtoRequest.putExtra("requestComment", ptoRequest.getRequest_comment());
+            iLaunchEditPtoRequest.putExtra("startDate", ptoRequest.getStartDate());
+            iLaunchEditPtoRequest.putExtra("endDate", ptoRequest.getEndDate());
+            iLaunchEditPtoRequest.putExtra("requestComment", ptoRequest.getRequestComment());
             context.startActivity(iLaunchEditPtoRequest);
         });
 

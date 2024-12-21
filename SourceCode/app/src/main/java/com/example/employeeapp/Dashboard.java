@@ -41,9 +41,9 @@ public class Dashboard extends AppCompatActivity {
             findViewById(R.id.employeeDetailsButton).setVisibility(View.VISIBLE);
             findViewById(R.id.employeePtoRequestsButton).setVisibility(View.VISIBLE);
             findViewById(R.id.addEmployeeButton).setVisibility(View.VISIBLE);
-            employeeNameTextView.setText(String.format("%s [Admin]", currentUser.getFull_name()));
+            employeeNameTextView.setText(String.format("%s [Admin]", currentUser.getFullName()));
         } else {
-            employeeNameTextView.setText(currentUser.getFull_name());
+            employeeNameTextView.setText(currentUser.getFullName());
         }
     }
 

@@ -31,7 +31,7 @@ public class ptoMenu extends AppCompatActivity {
         currentUser = databaseHelper.loadCurrentUser(this);
 
         TextView employeeNameTextView = findViewById(R.id.employeeName);
-        employeeNameTextView.setText(currentUser.getFull_name());
+        employeeNameTextView.setText(currentUser.getFullName());
     }
 
     public void launchRequestPto(View v)

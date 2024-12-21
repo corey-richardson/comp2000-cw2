@@ -32,10 +32,10 @@ public class EditPersonalDetails extends AppCompatActivity {
         currentUser = databaseHelper.loadCurrentUser(this);
 
         TextView employeeNameTextView = findViewById(R.id.employeeName);
-        employeeNameTextView.setText(currentUser.getFull_name());
+        employeeNameTextView.setText(currentUser.getFullName());
 
-        ((EditText) findViewById(R.id.employeeDetailsFirstNameField)).setText(currentUser.getFirst_name());
-        ((EditText) findViewById(R.id.employeeDetailsLastNameField)).setText(currentUser.getLast_name());
+        ((EditText) findViewById(R.id.employeeDetailsFirstNameField)).setText(currentUser.getFirstName());
+        ((EditText) findViewById(R.id.employeeDetailsLastNameField)).setText(currentUser.getLastName());
         ((EditText) findViewById(R.id.employeeDetailsEmailField)).setText(currentUser.getEmail());
         ((EditText) findViewById(R.id.employeeDetailsPhoneField)).setText(currentUser.getPhone());
         ((EditText) findViewById(R.id.employeeDetailsAddressField)).setText(currentUser.getAddress());
@@ -59,8 +59,8 @@ public class EditPersonalDetails extends AppCompatActivity {
             return;
         }
 
-        currentUser.setFirst_name(firstName);
-        currentUser.setLast_name(lastName);
+        currentUser.setFirstName(firstName);
+        currentUser.setLastName(lastName);
         currentUser.setEmail(email);
         currentUser.setPhone(phone);
         currentUser.setAddress(address);
