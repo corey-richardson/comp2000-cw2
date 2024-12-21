@@ -1,10 +1,12 @@
 package com.example.employeeapp;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.database.SQLException;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -13,10 +15,15 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
 public class aAddEmployee extends AppCompatActivity {
 
     DatabaseHelper databaseHelper;
     Employee currentUser;
+    TextView startDateField;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +38,9 @@ public class aAddEmployee extends AppCompatActivity {
 
         databaseHelper = DatabaseHelper.getInstance(this);
         currentUser = databaseHelper.loadCurrentUser(this);
+
+        startDateField = findViewById(R.id.addEmployeeStartDateField);
+        startDateField.setOnClickListener(view -> showDatePickerDialog());
     }
 
 
@@ -41,7 +51,7 @@ public class aAddEmployee extends AppCompatActivity {
         String department = ((EditText) findViewById(R.id.addEmployeeDepartmentField)).getText().toString().trim();
         String salaryString = ((EditText) findViewById(R.id.addEmployeeSalaryField)).getText().toString().trim();
         float salary = Float.parseFloat(salaryString);
-        String startDate = ((EditText) findViewById(R.id.addEmployeeStartDateField)).getText().toString().trim();
+        String startDate = startDateField.getText().toString().trim();
 
         Employee newEmployee = new Employee(-1, firstName, lastName, email, department,
                 salary, startDate, 30, "new_starter_password", "Employee");
@@ -64,5 +74,31 @@ public class aAddEmployee extends AppCompatActivity {
         } catch (Exception e) {
             Toast.makeText(this, "Failed to upload the employee via the API.", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    // A DatePickerDialog was used to standardise the input into ISO8601
+    // https://developer.android.com/reference/android/app/DatePickerDialog
+    private void showDatePickerDialog() {
+        Calendar calendar = Calendar.getInstance();
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, (datePicker, year, month, dayOfMonth) -> {
+            // Format selected date and time
+            calendar.set(year, month, dayOfMonth);
+
+            Calendar currentDate = Calendar.getInstance();
+            // Set these to start of day to allow currentDate to be selected in the Dialog
+            currentDate.set(Calendar.HOUR_OF_DAY, 0);
+            currentDate.set(Calendar.MINUTE, 0);
+            currentDate.set(Calendar.SECOND, 0);
+            currentDate.set(Calendar.MILLISECOND, 0);
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            String formattedDateTime = dateFormat.format(calendar.getTime());
+            startDateField.setText(formattedDateTime);
+
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+
+        datePickerDialog.getDatePicker().updateDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        datePickerDialog.show();
     }
 }
