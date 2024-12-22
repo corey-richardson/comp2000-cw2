@@ -59,6 +59,21 @@ public class ApiService {
         new DeleteUserTask(context).execute(employee);
     }
 
+    // Helper Method
+    private static JSONObject employeeToJson(Employee employee) {
+        // Convert Employee to JSON
+        Map<String, Object> employeeMap = new HashMap<>();
+        employeeMap.put("firstname", employee.getFirstName());
+        employeeMap.put("lastname", employee.getLastName());
+        employeeMap.put("email", employee.getEmail());
+        employeeMap.put("department", employee.getDepartment());
+        employeeMap.put("salary", employee.getSalary());
+        employeeMap.put("joiningdate", employee.getStartDate());
+        employeeMap.put("leaves", employee.getHolidayAllowance());
+
+        return new JSONObject(employeeMap);
+    }
+
     // AsyncTask Classes
     // API HealthCheck Task
     private static class HealthCheck extends AsyncTask<Void, Void, Void> {
@@ -106,16 +121,7 @@ public class ApiService {
             Employee employee = employees[0];
             String insertEmployeeUrl = API_URL + "/employees/add";
 
-            // Convert Employee to JSON
-            Map<String, Object> employeeMap = new HashMap<>();
-            employeeMap.put("firstname", employee.getFirstName());
-            employeeMap.put("lastname", employee.getLastName());
-            employeeMap.put("email", employee.getEmail());
-            employeeMap.put("department", employee.getDepartment());
-            employeeMap.put("salary", employee.getSalary());
-            employeeMap.put("joiningdate", employee.getStartDate());
-
-            JSONObject employeeJson = new JSONObject(employeeMap);
+            JSONObject employeeJson = employeeToJson(employee);
 
             JsonObjectRequest request = new JsonObjectRequest(
                     Request.Method.POST, insertEmployeeUrl, employeeJson,
@@ -224,21 +230,7 @@ public class ApiService {
             Employee employee = employees[0];
             String updateEmployeeUrl = API_URL + "/employees/edit/" + employee.getId();
 
-            // Convert Employee to JSON
-            Map<String, Object> employeeMap = new HashMap<>();
-            employeeMap.put("firstname", employee.getFirstName());
-            employeeMap.put("lastname", employee.getLastName());
-            employeeMap.put("email", employee.getEmail());
-            employeeMap.put("department", employee.getDepartment());
-            employeeMap.put("salary", employee.getSalary());
-            employeeMap.put("joiningdate", employee.getStartDate());
-            employeeMap.put("leaves", employee.getHolidayAllowance());
-
-            Log.d("salary", Float.toString(employee.getSalary()));
-            Log.d("joiningdate", employee.getStartDate());
-            Log.d("leaves", Integer.toString(employee.getHolidayAllowance()));
-
-            JSONObject employeeJson = new JSONObject(employeeMap);
+            JSONObject employeeJson = employeeToJson(employee);
 
             JsonObjectRequest request = new JsonObjectRequest(
                     Request.Method.PUT, updateEmployeeUrl, employeeJson,
