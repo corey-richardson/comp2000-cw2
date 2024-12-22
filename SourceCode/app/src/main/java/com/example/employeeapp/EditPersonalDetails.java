@@ -65,6 +65,9 @@ public class EditPersonalDetails extends AppCompatActivity {
         databaseHelper.updateUserInDatabase(this, currentUser);
         Toast.makeText(this, "Employee details updated successfully", Toast.LENGTH_SHORT).show();
 
+        // Reflect changes in the API
+        ApiService.apiUpdateUser(this, currentUser);
+
         Intent returnToDashboard = new Intent(EditPersonalDetails.this, Dashboard.class);
         startActivity(returnToDashboard);
         finish();
