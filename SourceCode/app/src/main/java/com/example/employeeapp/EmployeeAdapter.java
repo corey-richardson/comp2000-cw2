@@ -15,6 +15,7 @@ import android.widget.Toast;
 import java.util.List;
 
 public class EmployeeAdapter extends BaseAdapter {
+    private static EmployeeAdapter instance;
     private final DatabaseHelper databaseHelper;
     private final Context context;
     private final List<Employee> employeeList;
@@ -72,10 +73,14 @@ public class EmployeeAdapter extends BaseAdapter {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     try {
+                        ApiService.apiDeleteUser(context, employee.getId());
+                    } catch (Exception e) {
+                        Toast.makeText(context, "Failed to delete Employee from API", Toast.LENGTH_SHORT).show();
+                    }
+                    try {
                         databaseHelper.deleteEmployee(employee.getId());
                     } catch (Exception e) {
-                        Toast.makeText(context, "Failed to delete Employee", Toast.LENGTH_SHORT).show();
-                        return;
+                        Toast.makeText(context, "Failed to delete Employee Locally", Toast.LENGTH_SHORT).show();
                     }
                     employeeList.remove(position);
                     notifyDataSetChanged(); // Refreshes ListView

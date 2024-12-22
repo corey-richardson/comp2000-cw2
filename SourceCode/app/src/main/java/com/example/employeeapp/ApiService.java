@@ -143,7 +143,7 @@ public class ApiService {
 
                                     try {
                                         // Insert employee into database
-                                        databaseHelper.insertUser(employee);
+                                        databaseHelper.insertUser(context, employee);
                                         Log.d("AddedEmployee", employee.getFullName());
                                     } catch (Exception e) {
                                         Log.d("FailedEmployeeInsert", employee.getFullName());
@@ -208,6 +208,38 @@ public class ApiService {
                     public void onErrorResponse(VolleyError error) {
                         Log.e("UpdateUser", "Error updating employee", error);
                         Toast.makeText(context, "Failed to update employee.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+
+        queue = getRequestQueue(context);
+        queue.add(request);
+    }
+
+
+    public static void apiDeleteUser(Context context, int userId) {
+        DatabaseHelper databaseHelper = DatabaseHelper.getInstance(context);
+        Employee employee = databaseHelper.getEmployeeById(userId);
+        apiDeleteUser(context, employee);
+    }
+
+    public static void apiDeleteUser(Context context, Employee employee) {
+        String deleteEmployeeUrl = API_URL + "/employees/delete/" + employee.getId();
+
+        StringRequest request = new StringRequest(Request.Method.DELETE, deleteEmployeeUrl,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Handle success response
+                        // Toast.makeText(context, "Employee deleted successfully!", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handle error response
+                        Log.e("DeleteUser", "Error deleting employee", error);
+                        // Toast.makeText(context, "Failed to delete employee.", Toast.LENGTH_SHORT).show();
                     }
                 }
         );
