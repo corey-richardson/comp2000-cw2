@@ -134,23 +134,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Log.d("cursorToEmployee", "Attempting to convert Cursor to Employee.");
         Employee employee = null;
         try {
-            if (cursor.moveToFirst()) {
-                employee = new Employee(
-                        cursor.getInt(cursor.getColumnIndexOrThrow("id")),
-                        cursor.getString(cursor.getColumnIndexOrThrow("first_name")),
-                        cursor.getString(cursor.getColumnIndexOrThrow("last_name")),
-                        cursor.getString(cursor.getColumnIndexOrThrow("email")),
-                        cursor.getString(cursor.getColumnIndexOrThrow("department")),
-                        cursor.getFloat(cursor.getColumnIndexOrThrow("salary")),
-                        cursor.getString(cursor.getColumnIndexOrThrow("start_date")),
-                        cursor.getInt(cursor.getColumnIndexOrThrow("holiday_allowance")),
-                        cursor.getString(cursor.getColumnIndexOrThrow("password")),
-                        cursor.getString(cursor.getColumnIndexOrThrow("role"))
-                );
-                Log.d("cursorToEmployee", "Created Employee Object for " + employee.getFullName());
-            } else {
-                Log.d("cursorToEmployee", "Cursor is empty; no Employee created.");
-            }
+            employee = new Employee(
+                    cursor.getInt(cursor.getColumnIndexOrThrow("id")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("first_name")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("last_name")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("email")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("department")),
+                    cursor.getFloat(cursor.getColumnIndexOrThrow("salary")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("start_date")),
+                    cursor.getInt(cursor.getColumnIndexOrThrow("holiday_allowance")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("password")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("role"))
+            );
         } catch (Exception e) {
             Log.e("cursorToEmployee", "Failed to convert Cursor to Employee", e);
         }
@@ -195,7 +190,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         try (SQLiteDatabase db = getReadableDatabase()) {
             cursor = db.rawQuery("SELECT * FROM User WHERE id = ?", new String[]{ Integer.toString(userId) });
             Log.d("getEmployeeByID", "Found " + cursor.getCount() + " employees.");
-            employee = cursorToEmployee(cursor);
+            if (cursor.moveToFirst()) {
+                employee = cursorToEmployee(cursor);
+            }
             Log.d("getEmployeeByID", "Converted Cursor to Employee.");
         } catch (Exception e) {
             Log.e("getEmployeeByID", "Failed to get Employee #" + userId);
