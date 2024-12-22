@@ -3,6 +3,7 @@ package com.example.employeeapp;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,7 +92,11 @@ public class EmployeeAdapter extends BaseAdapter {
             confirmDeletion.show();
         });
 
-        // TO ADD: editButton OnClickListener
+        editButton.setOnClickListener(v -> {
+            Intent iLaunchEditEmployee = new Intent(context, aEditEmployee.class);
+            iLaunchEditEmployee.putExtra("employeeId", employee.getId());
+            context.startActivity(iLaunchEditEmployee);
+        });
 
         return convertView;
     }
