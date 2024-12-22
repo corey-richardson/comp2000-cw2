@@ -37,8 +37,8 @@ public class ApiService {
         new HealthCheck(context).execute();
     }
 
-    public static void apiInsertUser(final Context context) {
-        new InsertUserTask(context).execute();
+    public static void apiInsertUser(final Context context, Employee employee) {
+        new InsertUserTask(context).execute(employee);
     }
 
     // AsyncTask Classes
@@ -122,5 +122,7 @@ public class ApiService {
             return null;
         }
     }
+
+
 
 }
