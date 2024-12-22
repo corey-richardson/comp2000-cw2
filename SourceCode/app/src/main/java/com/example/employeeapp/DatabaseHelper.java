@@ -266,7 +266,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.beginTransaction();
         try {
 
-            userValues.put("id", newEmployee.getId());
+            if (newEmployee.getId() > 0) { // if ID is meaningful
+                userValues.put("id", newEmployee.getId());
+            }
+
             userValues.put("first_name", newEmployee.getFirstName());
             userValues.put("last_name", newEmployee.getLastName());
             userValues.put("email", newEmployee.getEmail());
