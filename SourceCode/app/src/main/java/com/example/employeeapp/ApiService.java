@@ -45,6 +45,10 @@ public class ApiService {
         new FetchEmployeesTask(context).execute();
     }
 
+    public static void apiUpdateUser(Context context, Employee employee) {
+        new UpdateUserTask(context).execute(employee);
+    }
+
     // AsyncTask Classes
     // API HealthCheck Task
     private static class HealthCheck extends AsyncTask<Void, Void, Void> {
@@ -194,6 +198,57 @@ public class ApiService {
             queue = getRequestQueue(context);
             queue.add(jsonArrayRequest);
 
+            return null;
+        }
+    }
+
+    private static class UpdateUserTask extends AsyncTask<Employee, Void, Void> {
+        private final Context context;
+
+        public UpdateUserTask(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        protected Void doInBackground(Employee... employees) {
+            Employee employee = employees[0];
+            String updateEmployeeUrl = API_URL + "/employees/edit/" + employee.getId();
+
+            // Convert Employee to JSON
+            Map<String, Object> employeeMap = new HashMap<>();
+            employeeMap.put("firstname", employee.getFirstName());
+            employeeMap.put("lastname", employee.getLastName());
+            employeeMap.put("email", employee.getEmail());
+            employeeMap.put("department", employee.getDepartment());
+            employeeMap.put("salary", employee.getSalary());
+            employeeMap.put("joiningdate", employee.getStartDate());
+            employeeMap.put("leaves", employee.getHolidayAllowance());
+
+            Log.d("salary", Float.toString(employee.getSalary()));
+            Log.d("joiningdate", employee.getStartDate());
+            Log.d("leaves", Integer.toString(employee.getHolidayAllowance()));
+
+            JSONObject employeeJson = new JSONObject(employeeMap);
+
+            JsonObjectRequest request = new JsonObjectRequest(
+                    Request.Method.PUT, updateEmployeeUrl, employeeJson,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            Toast.makeText(context, "Employee updated successfully!", Toast.LENGTH_SHORT).show();
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.e("UpdateUser", "Error updating employee", error);
+                            Toast.makeText(context, "Failed to update employee.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+            );
+
+            queue = getRequestQueue(context);
+            queue.add(request);
             return null;
         }
     }
