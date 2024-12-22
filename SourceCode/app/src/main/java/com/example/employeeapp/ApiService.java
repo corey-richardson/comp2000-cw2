@@ -92,6 +92,7 @@ public class ApiService {
                         @Override
                         public void onResponse(String response) {
                             Log.d("VolleyResponse", "Response is: " + response);
+                            NotificationHelper.showNotification(context, "Health Check", "API is reachable!");
                         }
                     },
                     new Response.ErrorListener() {
@@ -99,6 +100,7 @@ public class ApiService {
                         public void onErrorResponse(VolleyError error) {
                             Log.e("VolleyError", "No response!", error);
                             Toast.makeText(context, "No response from API.", Toast.LENGTH_LONG).show();
+                            NotificationHelper.showNotification(context, "Health Check", "Failed to reach API.");
                         }
                     });
 
@@ -129,6 +131,7 @@ public class ApiService {
                         @Override
                         public void onResponse(JSONObject response) {
                             Toast.makeText(context, "Employee added successfully!", Toast.LENGTH_SHORT).show();
+                            NotificationHelper.showNotification(context, "Insert User", "Employee added successfully!");
                         }
                     },
                     new Response.ErrorListener() {
@@ -136,6 +139,7 @@ public class ApiService {
                         public void onErrorResponse(VolleyError error) {
                             Log.e("InsertUser", "Error inserting employee", error);
                             Toast.makeText(context, "Failed to add employee.", Toast.LENGTH_SHORT).show();
+                            NotificationHelper.showNotification(context, "Insert User", "Failed to add employee.");
                         }
                     }
             );
@@ -238,6 +242,7 @@ public class ApiService {
                         @Override
                         public void onResponse(JSONObject response) {
                             Toast.makeText(context, "Employee updated successfully!", Toast.LENGTH_SHORT).show();
+                            NotificationHelper.showNotification(context, "Update User", "Employee updated successfully!");
                         }
                     },
                     new Response.ErrorListener() {
@@ -245,6 +250,7 @@ public class ApiService {
                         public void onErrorResponse(VolleyError error) {
                             Log.e("UpdateUser", "Error updating employee", error);
                             Toast.makeText(context, "Failed to update employee.", Toast.LENGTH_SHORT).show();
+                            NotificationHelper.showNotification(context, "Update User", "Failed to update employee.");
                         }
                     }
             );
@@ -273,6 +279,7 @@ public class ApiService {
                         public void onResponse(String response) {
                             // Handle success response
                             // Toast.makeText(context, "Employee deleted successfully!", Toast.LENGTH_SHORT).show();
+                            NotificationHelper.showNotification(context, "Delete User", "Employee deleted successfully!");
                         }
                     },
                     new Response.ErrorListener() {
@@ -281,6 +288,7 @@ public class ApiService {
                             // Handle error response
                             Log.e("DeleteUser", "Error deleting employee", error);
                             // Toast.makeText(context, "Failed to delete employee.", Toast.LENGTH_SHORT).show();
+                            NotificationHelper.showNotification(context, "Delete User", "Failed to delete employee.");
                         }
                     }
             );
