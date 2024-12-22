@@ -23,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialise databaseHelper
         databaseHelper = DatabaseHelper.getInstance(this);
+        // Initialise Notification Channel
+        NotificationHelper.createNotificationChannel(this);
 
         EditText editTextEmail = findViewById(R.id.loginScreenEmailField);
         EditText editTextPassword = findViewById(R.id.loginScreenPasswordField);

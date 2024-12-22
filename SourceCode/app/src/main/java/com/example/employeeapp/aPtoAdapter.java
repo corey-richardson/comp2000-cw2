@@ -98,6 +98,7 @@ public class aPtoAdapter extends BaseAdapter {
             Log.e("UpdateRequestStatus", "Error while updating PTO request status: ", e);
         }
 
+        NotificationHelper.showNotification(context, "PTO Status Change", "The status of your PTO Request has changed.");
         notifyDataSetChanged();
     }
 }
