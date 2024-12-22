@@ -318,7 +318,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         List<Employee> updatedEmployeeList = getAllEmployees();
-        EmployeeAdapter employeeAdapter = EmployeeAdapter.getInstance(context, updatedEmployeeList);
+        EmployeeAdapter employeeAdapter = new EmployeeAdapter(context, updatedEmployeeList);
         employeeAdapter.notifyDataSetChanged();
     }
 
@@ -345,7 +345,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         List<Employee> updatedEmployeeList = getAllEmployees();
-        EmployeeAdapter employeeAdapter = EmployeeAdapter.getInstance(context, updatedEmployeeList);
+        EmployeeAdapter employeeAdapter = new EmployeeAdapter(context, updatedEmployeeList);
         employeeAdapter.notifyDataSetChanged();
     }
 
