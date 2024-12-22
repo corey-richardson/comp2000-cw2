@@ -49,6 +49,12 @@ public class ApiService {
         new UpdateUserTask(context).execute(employee);
     }
 
+    public static void apiDeleteUser(Context context, int userId) {
+        DatabaseHelper databaseHelper = DatabaseHelper.getInstance(context);
+        Employee employee = databaseHelper.getEmployeeById(userId);
+        new DeleteUserTask(context).execute(employee);
+    }
+
     public static void apiDeleteUser(Context context, Employee employee) {
         new DeleteUserTask(context).execute(employee);
     }
