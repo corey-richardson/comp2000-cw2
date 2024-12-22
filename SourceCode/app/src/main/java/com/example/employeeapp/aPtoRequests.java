@@ -1,6 +1,7 @@
 package com.example.employeeapp;
 
 import android.os.Bundle;
+import android.widget.ListView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,7 +9,14 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.util.List;
+
 public class aPtoRequests extends AppCompatActivity {
+
+    DatabaseHelper databaseHelper;
+    Employee currentUser;
+    aPtoAdapter aPtoAdapter;
+    ListView aPtoListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,5 +28,13 @@ public class aPtoRequests extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        databaseHelper = DatabaseHelper.getInstance(this);
+        currentUser = databaseHelper.loadCurrentUser(this);
+
+        aPtoListView = findViewById(R.id.aptoListView);
+        List<PtoRequest> ptoRequestList = databaseHelper.getAllPtoRequests();
+        aPtoAdapter = new aPtoAdapter(this, ptoRequestList);
+        aPtoListView.setAdapter(aPtoAdapter);
     }
 }
