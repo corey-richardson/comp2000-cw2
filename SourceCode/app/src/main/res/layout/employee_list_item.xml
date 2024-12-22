@@ -46,7 +46,7 @@
         android:id="@+id/listItemAdditionalInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Salary and Start Date"
+        android:text="Salary, Start Date and ID"
         android:textSize="16sp"
         android:textColor="#DEDEDE"
         android:layout_marginTop="4dp"

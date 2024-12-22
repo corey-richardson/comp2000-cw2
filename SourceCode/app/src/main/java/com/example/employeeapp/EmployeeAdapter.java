@@ -49,7 +49,7 @@ public class EmployeeAdapter extends BaseAdapter {
         Employee employee = employeeList.get(position);
 
         String salaryString = context.getString(R.string.salary_string, employee.getSalary());
-        String additionalInfo = context.getString(R.string.additional_info, salaryString, employee.getStartDate());
+        String additionalInfo = context.getString(R.string.additional_info, salaryString, employee.getStartDate(), employee.getId());
 
         TextView fullNameTextView = convertView.findViewById(R.id.listItemEmployeeFullName);
         TextView emailTextView = convertView.findViewById(R.id.listItemEmployeeEmail);
@@ -59,7 +59,7 @@ public class EmployeeAdapter extends BaseAdapter {
         Button deleteButton = convertView.findViewById(R.id.delete_employee_button);
         Button editButton = convertView.findViewById(R.id.edit_employee_button);
 
-        fullNameTextView.setText(employee.getFullName() + " " + employee.getId());
+        fullNameTextView.setText(employee.getFullName());
         emailTextView.setText(employee.getEmail());
         departmentTextView.setText(employee.getDepartment());
         additionalInfoTextView.setText(additionalInfo);
