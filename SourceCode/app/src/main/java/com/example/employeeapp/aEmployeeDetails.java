@@ -34,7 +34,7 @@ public class aEmployeeDetails extends AppCompatActivity {
 
         employeeListView = findViewById(R.id.employeeListView);
         List<Employee> employeeList = databaseHelper.getAllEmployees();
-        employeeAdapter = EmployeeAdapter.getInstance(this, employeeList);
+        employeeAdapter = new EmployeeAdapter(this, employeeList);
         employeeListView.setAdapter(employeeAdapter);
     }
 }
