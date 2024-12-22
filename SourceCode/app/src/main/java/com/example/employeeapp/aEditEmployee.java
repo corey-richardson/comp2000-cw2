@@ -118,6 +118,7 @@ public class aEditEmployee extends AppCompatActivity {
         float salary = Float.parseFloat(salaryString);
 
         if (!startDate.matches("\\d{4}-\\d{2}-\\d{2}")) {
+            Log.d("DateParse", "Changing Date Format");
             // Only format the date if it's not already in ISO8601 format
             SimpleDateFormat dateStringFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z");
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
