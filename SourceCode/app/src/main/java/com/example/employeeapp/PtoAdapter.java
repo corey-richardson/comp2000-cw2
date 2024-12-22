@@ -78,7 +78,6 @@ public class PtoAdapter extends BaseAdapter {
             case "Denied":
                 ptoStatusTextField.setTextColor(Color.parseColor("#FF0000"));
                 ptoStatusTextField.setTypeface(null, Typeface.BOLD);
-                cancelButton.setVisibility(View.GONE);
                 editButton.setVisibility(View.GONE);
                 resubmitButton.setVisibility(View.VISIBLE);
                 break;

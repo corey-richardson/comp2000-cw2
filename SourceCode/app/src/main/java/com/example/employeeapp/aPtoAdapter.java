@@ -1,6 +1,8 @@
 package com.example.employeeapp;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -45,6 +48,10 @@ public class aPtoAdapter extends BaseAdapter {
         }
 
         PtoRequest ptoRequest = aPtoRequestList.get(position);
+        if (ptoRequest.getStatus().equals("Approved") || ptoRequest.getStatus().equals("Denied")) {
+            return new View(context);
+        }
+
         Log.d("RequesterId", Integer.toString(ptoRequest.getRequesterId()));
         Employee requester = databaseHelper.getEmployeeById(ptoRequest.getRequesterId());
 
@@ -61,6 +68,36 @@ public class aPtoAdapter extends BaseAdapter {
         Button approveButton = convertView.findViewById(R.id.apto_approve_button);
         Button denyButton = convertView.findViewById(R.id.apto_deny_button);
 
+        if (ptoRequest.getStatus().equals("Approved") || ptoRequest.getStatus().equals("Denied")) {
+            approveButton.setVisibility(View.GONE);
+            denyButton.setVisibility(View.GONE);
+        }
+
+        approveButton.setOnClickListener(v -> {
+            updateRequestStatus(ptoRequest, "Approved");
+        });
+
+        denyButton.setOnClickListener(v -> {
+            updateRequestStatus(ptoRequest, "Denied");
+        });
+
         return convertView;
+    }
+
+
+    private void updateRequestStatus(PtoRequest ptoRequest, String updatedStatus) {
+        ContentValues statusValue = new ContentValues();
+        statusValue.put("status", updatedStatus);
+
+        ptoRequest.setStatus(updatedStatus);
+        try (SQLiteDatabase db = databaseHelper.getWritableDatabase()) {
+            db.update("PtoRequest", statusValue, "id = ?", new String[]{ Integer.toString(ptoRequest.getId()) });
+            Toast.makeText(context, updatedStatus + " PTO Request.", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Toast.makeText(context, "Failed to update PTO Request.", Toast.LENGTH_SHORT).show();
+            Log.e("UpdateRequestStatus", "Error while updating PTO request status: ", e);
+        }
+
+        notifyDataSetChanged();
     }
 }
