@@ -5,7 +5,7 @@ import android.util.Log;
 public class PtoRequest {
     private final int id;
     private final int requesterId;
-    private final String status;
+    private String status;
     private final String startDate;
     private final String endDate;
     private final String requestComment;
@@ -42,5 +42,11 @@ public class PtoRequest {
 
     public String getRequestComment() {
         return requestComment;
+    }
+
+    public void setStatus(String status) {
+        if (status.equals("Approved") || status.equals("Waiting") || status.equals("Denied")) {
+            this.status = status;
+        }
     }
 }

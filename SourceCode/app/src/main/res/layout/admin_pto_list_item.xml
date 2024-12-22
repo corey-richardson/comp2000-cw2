@@ -82,7 +82,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Cancel Request"
+            android:text="Deny Request"
             android:backgroundTint="#FF0000"
             android:textColor="#FFFFFF"
             android:textSize="14sp" />
