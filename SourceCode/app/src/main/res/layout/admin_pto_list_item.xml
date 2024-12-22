@@ -1,0 +1,92 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:background="?android:attr/selectableItemBackground"
+    android:layout_margin="8dp"
+    android:layout_gravity="center">
+
+    <!-- Employee Name Text -->
+    <TextView
+        android:id="@+id/apto_employee_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start Date - End Date"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="8dp"
+        android:ellipsize="end"
+        android:maxLines="1" />
+
+    <!-- Start Date and End Date Text -->
+    <TextView
+        android:id="@+id/apto_date_range"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start Date - End Date"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="8dp"
+        android:ellipsize="end"
+        android:maxLines="1" />
+
+    <!-- Status Text -->
+    <TextView
+        android:id="@+id/apto_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Status"
+        android:textSize="16sp"
+        android:textColor="#DEDEDE"
+        android:layout_marginTop="4dp"
+        android:ellipsize="end"
+        android:maxLines="1" />
+
+    <!-- Comment Text -->
+    <TextView
+        android:id="@+id/apto_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Comment"
+        android:textSize="16sp"
+        android:textColor="#DEDEDE"
+        android:layout_marginTop="4dp"
+        android:ellipsize="end"
+        android:maxLines="10"
+        android:scrollHorizontally="false"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+
+        <!-- Approve Button -->
+        <Button
+            android:id="@+id/apto_approve_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Approve Request"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="#55FF00"
+            android:textColor="#454545"
+            android:textSize="14sp" />
+
+        <!-- Cancel Button -->
+        <Button
+            android:id="@+id/apto_deny_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Cancel Request"
+            android:backgroundTint="#FF0000"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+</LinearLayout>
