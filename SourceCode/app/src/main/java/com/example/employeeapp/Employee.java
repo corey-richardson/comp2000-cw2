@@ -4,8 +4,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+import android.widget.Toast;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 
 public class Employee {
     private int id;
@@ -109,8 +113,8 @@ public class Employee {
         this.holidayAllowance = Math.max(holidayAllowance, 0);;
     }
 
-    public void setStartDate(String start_date) {
-        this.startDate = start_date;
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
     }
 
     public void setPassword(String password) {
