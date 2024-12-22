@@ -272,7 +272,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     // Create Methods
-    public void insertUser(Employee newEmployee) {
+    public void insertUser(Context context, Employee newEmployee) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues userValues = new ContentValues();
         ContentValues settingsValues = new ContentValues();
@@ -316,6 +316,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.endTransaction();
             db.close();
         }
+
+        List<Employee> updatedEmployeeList = getAllEmployees();
+        EmployeeAdapter employeeAdapter = EmployeeAdapter.getInstance(context, updatedEmployeeList);
+        employeeAdapter.notifyDataSetChanged();
     }
 
 
@@ -339,6 +343,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Log.e("DatabaseHelper", "Error updating employee details.");
             throw e;
         }
+
+        List<Employee> updatedEmployeeList = getAllEmployees();
+        EmployeeAdapter employeeAdapter = EmployeeAdapter.getInstance(context, updatedEmployeeList);
+        employeeAdapter.notifyDataSetChanged();
     }
 
 
