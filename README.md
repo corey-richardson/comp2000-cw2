@@ -1,3 +1,3 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/1oOjCPDs)
 
-[![wakatime](https://wakatime.com/badge/user/55c30436-1509-4eb9-9f18-fa9b7c6060c4/project/2c389562-91a0-437c-866a-a514ee870e93.svg)](https://wakatime.com/@coreyrichardson/projects/rwcthymumd?start=2024-12-10&end=2025-01-31)
+[![wakatime](https://wakatime.com/badge/user/55c30436-1509-4eb9-9f18-fa9b7c6060c4/project/2c389562-91a0-437c-866a-a514ee870e93.svg)](https://wakatime.com/@coreyrichardson/projects/rwcthymumd?start=2024-12-10&end=2025-01-07)
