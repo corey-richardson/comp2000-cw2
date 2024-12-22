@@ -36,7 +36,7 @@ public class ViewHoliday extends AppCompatActivity {
         currentUser = databaseHelper.loadCurrentUser(this);
 
         ptoListView = findViewById(R.id.ptoListView);
-        List<PtoRequest> ptoRequestList = databaseHelper.getAllPtoRequests();
+        List<PtoRequest> ptoRequestList = databaseHelper.getAllPtoRequestsByRequester(currentUser.getId());
         ptoAdapter = new PtoAdapter(this, ptoRequestList);
         ptoListView.setAdapter(ptoAdapter);
     }
