@@ -41,6 +41,10 @@ public class ApiService {
         new InsertUserTask(context).execute(employee);
     }
 
+    public static void fetchAndStoreEmployees(Context context) {
+        new FetchEmployeesTask(context).execute();
+    }
+
     // AsyncTask Classes
     // API HealthCheck Task
     private static class HealthCheck extends AsyncTask<Void, Void, Void> {
@@ -123,6 +127,75 @@ public class ApiService {
         }
     }
 
+    private static class FetchEmployeesTask extends AsyncTask<Void, Void, Void> {
+        private final Context context;
 
+        public FetchEmployeesTask(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            String fetchEmployeesUrl = API_URL + "/employees";
+            DatabaseHelper databaseHelper = DatabaseHelper.getInstance(context);
+
+            JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+                    Request.Method.GET, fetchEmployeesUrl, null,
+                    new Response.Listener<JSONArray>() {
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            for (int i = 0; i < response.length(); i++) {
+
+                                try {
+                                    JSONObject jsonObject = response.getJSONObject(i);
+
+                                    // Skip if employee already exists
+                                    if (databaseHelper.getEmployeeById(jsonObject.getInt("id")) != null) {
+                                        databaseHelper.deleteEmployee(jsonObject.getInt("id"));
+                                    }
+
+                                    // Create Employee object
+                                    Employee employee = new Employee(
+                                            jsonObject.getInt("id"),
+                                            jsonObject.getString("firstname"),
+                                            jsonObject.getString("lastname"),
+                                            jsonObject.getString("email"),
+                                            jsonObject.getString("department"),
+                                            (float) jsonObject.getDouble("salary"),
+                                            jsonObject.getString("joiningdate"),
+                                            jsonObject.getInt("leaves"),
+                                            "employee_password",
+                                            "Employee"
+                                    );
+
+                                    try {
+                                        // Insert employee into database
+                                        databaseHelper.insertUser(context, employee);
+                                        Log.d("AddedEmployee", employee.getFullName());
+                                    } catch (Exception e) {
+                                        Log.d("FailedEmployeeInsert", employee.getFullName());
+                                    }
+
+                                } catch (Exception e) {
+                                    Log.e("FetchAndStore", "Error processing employee");
+                                }
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.e("FetchEmployees", "Error fetching employees: " + error.getMessage());
+                            Toast.makeText(context, "Failed to fetch employees!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+            );
+
+            queue = getRequestQueue(context);
+            queue.add(jsonArrayRequest);
+
+            return null;
+        }
+    }
 
 }
