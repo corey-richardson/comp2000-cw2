@@ -113,6 +113,7 @@ public class ApiService {
                         // Use worker thread
                         executor.execute(() -> {
                             for (int i = 0; i < response.length(); i++) {
+
                                 try {
                                     JSONObject jsonObject = response.getJSONObject(i);
 
@@ -135,11 +136,16 @@ public class ApiService {
                                             "Employee"
                                     );
 
-                                    // Insert employee into database
-                                    databaseHelper.insertUser(employee);
+                                    try {
+                                        // Insert employee into database
+                                        databaseHelper.insertUser(employee);
+                                        Log.d("AddedEmployee", employee.getFullName());
+                                    } catch (Exception e) {
+                                        Log.d("FailedEmployeeInsert", employee.getFullName());
+                                    }
 
                                 } catch (Exception e) {
-                                    Log.e("FetchAndStore", "Error processing employee", e);
+                                    Log.e("FetchAndStore", "Error processing employee");
                                 }
                             }
                         });

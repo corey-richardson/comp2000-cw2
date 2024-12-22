@@ -57,15 +57,15 @@ public class aAddEmployee extends AppCompatActivity {
                 salary, startDate, 30, "new_starter_password", "Employee");
 
         // Save the new employee LOCALLY
-        try {
-            databaseHelper.insertUser(newEmployee);
-            Toast.makeText(this, "Added new employee to database.", Toast.LENGTH_SHORT).show();
-            Intent iLaunchViewEmployees = new Intent(this, aEmployeeDetails.class);
-            startActivity(iLaunchViewEmployees);
-            finish();
-        } catch (SQLException e) {
-            Toast.makeText(this, "Failed to add new employee.", Toast.LENGTH_SHORT).show();
-        }
+//        try {
+//            databaseHelper.insertUser(newEmployee);
+//            Toast.makeText(this, "Added new employee to database.", Toast.LENGTH_SHORT).show();
+//            Intent iLaunchViewEmployees = new Intent(this, aEmployeeDetails.class);
+//            startActivity(iLaunchViewEmployees);
+//            finish();
+//        } catch (SQLException e) {
+//            Toast.makeText(this, "Failed to add new employee.", Toast.LENGTH_SHORT).show();
+//        }
 
         // NOW USE THE API
         try {
@@ -74,6 +74,13 @@ public class aAddEmployee extends AppCompatActivity {
         } catch (Exception e) {
             Toast.makeText(this, "Failed to upload the employee via the API.", Toast.LENGTH_SHORT).show();
         }
+
+        // Re-fetch from API to update local database
+        ApiService.fetchAndStoreEmployees(this);
+
+        Intent iLaunchViewEmployees = new Intent(this, aEmployeeDetails.class);
+        startActivity(iLaunchViewEmployees);
+        finish();
     }
 
     // A DatePickerDialog was used to standardise the input into ISO8601
