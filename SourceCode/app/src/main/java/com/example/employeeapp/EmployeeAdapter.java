@@ -96,6 +96,7 @@ public class EmployeeAdapter extends BaseAdapter {
             Intent iLaunchEditEmployee = new Intent(context, aEditEmployee.class);
             iLaunchEditEmployee.putExtra("employeeId", employee.getId());
             context.startActivity(iLaunchEditEmployee);
+            notifyDataSetChanged();
         });
 
         return convertView;

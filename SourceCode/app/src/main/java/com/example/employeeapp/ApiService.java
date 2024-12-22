@@ -19,6 +19,9 @@ import com.google.gson.JsonElement;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -68,7 +71,7 @@ public class ApiService {
     }
 
     public static void apiInsertUser(Context context, Employee employee) {
-        String insertUserUrl = API_URL + "/employees/add";
+        String insertEmployeeUrl = API_URL + "/employees/add";
 
         // Convert Employee to JSON
         Map<String, Object> employeeMap = new HashMap<>();
@@ -78,10 +81,11 @@ public class ApiService {
         employeeMap.put("department", employee.getDepartment());
         employeeMap.put("salary", employee.getSalary());
         employeeMap.put("joiningdate", employee.getStartDate());
+
         JSONObject employeeJson = new JSONObject(employeeMap);
 
         JsonObjectRequest request = new JsonObjectRequest(
-                Request.Method.POST, insertUserUrl, employeeJson,
+                Request.Method.POST, insertEmployeeUrl, employeeJson,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -101,6 +105,7 @@ public class ApiService {
         queue.add(request);
     }
 
+
     public static void fetchAndStoreEmployees(Context context) {
         String fetchEmployeesUrl = API_URL + "/employees";
         DatabaseHelper databaseHelper = DatabaseHelper.getInstance(context);
@@ -119,7 +124,7 @@ public class ApiService {
 
                                     // Skip if employee already exists
                                     if (databaseHelper.getEmployeeById(jsonObject.getInt("id")) != null) {
-                                        continue;
+                                        databaseHelper.deleteEmployee(jsonObject.getInt("id"));
                                     }
 
                                     // Create Employee object
@@ -162,5 +167,52 @@ public class ApiService {
 
         queue = getRequestQueue(context);
         queue.add(jsonArrayRequest);
+    }
+
+    // Override with ID param rather than Employee
+    public static void apiUpdateUser(Context context, int userId) {
+        DatabaseHelper databaseHelper = DatabaseHelper.getInstance(context);
+        Employee employee = databaseHelper.getEmployeeById(userId);
+        apiUpdateUser(context, employee);
+    }
+
+    public static void apiUpdateUser(Context context, Employee employee) {
+        String updateEmployeeUrl = API_URL + "/employees/edit/" + employee.getId();
+
+        // Convert Employee to JSON
+        Map<String, Object> employeeMap = new HashMap<>();
+        employeeMap.put("firstname", employee.getFirstName());
+        employeeMap.put("lastname", employee.getLastName());
+        employeeMap.put("email", employee.getEmail());
+        employeeMap.put("department", employee.getDepartment());
+        employeeMap.put("salary", employee.getSalary());
+        employeeMap.put("joiningdate", employee.getStartDate());
+        employeeMap.put("leaves", employee.getHolidayAllowance());
+
+        Log.d("salary", Float.toString(employee.getSalary()));
+        Log.d("joiningdate", employee.getStartDate());
+        Log.d("leaves", Integer.toString(employee.getHolidayAllowance()));
+
+        JSONObject employeeJson = new JSONObject(employeeMap);
+
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.PUT, updateEmployeeUrl, employeeJson,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Toast.makeText(context, "Employee updated successfully!", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("UpdateUser", "Error updating employee", error);
+                        Toast.makeText(context, "Failed to update employee.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+
+        queue = getRequestQueue(context);
+        queue.add(request);
     }
 }

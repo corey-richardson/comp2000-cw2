@@ -15,8 +15,10 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 public class aEditEmployee extends AppCompatActivity {
@@ -115,6 +117,20 @@ public class aEditEmployee extends AppCompatActivity {
         salaryString = salaryString.replace("£","");
         float salary = Float.parseFloat(salaryString);
 
+        if (!startDate.matches("\\d{4}-\\d{2}-\\d{2}")) {
+            // Only format the date if it's not already in ISO8601 format
+            SimpleDateFormat dateStringFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+            try {
+                Date startDateDate = dateStringFormat.parse(startDate);
+                startDate = dateFormat.format(startDateDate);  // Format to ISO 8601 (yyyy-MM-dd)
+            } catch (ParseException e) {
+                Log.e("DateParseError", "Error parsing the start date", e);
+                return;
+            }
+        }
+
         if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || department.isEmpty() ||
                 salaryString.isEmpty() || startDate.isEmpty()) {
             Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
@@ -129,6 +145,7 @@ public class aEditEmployee extends AppCompatActivity {
         employeeToEdit.setStartDate(startDate);
 
         databaseHelper.updateUserInDatabase(this, employeeToEdit);
+        ApiService.apiUpdateUser(this, employeeToEdit);
         finish();
     }
 }
