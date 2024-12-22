@@ -32,10 +32,17 @@ public class ApiService {
         return queue;
     }
 
+    // API Methods
     public static void apiHealthCheck(final Context context) {
         new HealthCheck(context).execute();
     }
 
+    public static void apiInsertUser(final Context context) {
+        new InsertUserTask(context).execute();
+    }
+
+    // AsyncTask Classes
+    // API HealthCheck Task
     private static class HealthCheck extends AsyncTask<Void, Void, Void> {
         private final Context context;
 
@@ -64,6 +71,53 @@ public class ApiService {
 
             queue = Volley.newRequestQueue(context);
             queue.add(stringRequest);
+
+            return null;
+        }
+    }
+
+    private static class InsertUserTask extends AsyncTask<Employee, Void, Void> {
+        private final Context context;
+
+        public InsertUserTask(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        protected Void doInBackground(Employee... employees) {
+            Employee employee = employees[0];
+            String insertEmployeeUrl = API_URL + "/employees/add";
+
+            // Convert Employee to JSON
+            Map<String, Object> employeeMap = new HashMap<>();
+            employeeMap.put("firstname", employee.getFirstName());
+            employeeMap.put("lastname", employee.getLastName());
+            employeeMap.put("email", employee.getEmail());
+            employeeMap.put("department", employee.getDepartment());
+            employeeMap.put("salary", employee.getSalary());
+            employeeMap.put("joiningdate", employee.getStartDate());
+
+            JSONObject employeeJson = new JSONObject(employeeMap);
+
+            JsonObjectRequest request = new JsonObjectRequest(
+                    Request.Method.POST, insertEmployeeUrl, employeeJson,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            Toast.makeText(context, "Employee added successfully!", Toast.LENGTH_SHORT).show();
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.e("InsertUser", "Error inserting employee", error);
+                            Toast.makeText(context, "Failed to add employee.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+            );
+
+            queue = getRequestQueue(context);
+            queue.add(request);
 
             return null;
         }
