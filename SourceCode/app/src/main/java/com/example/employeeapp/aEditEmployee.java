@@ -4,8 +4,10 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,7 +22,7 @@ import java.util.Locale;
 public class aEditEmployee extends AppCompatActivity {
 
     DatabaseHelper databaseHelper;
-    Employee currentUser;
+    Employee currentUser, employeeToEdit;
 
     EditText firstNameField, lastNameField, emailField, departmentField, salaryField;
     TextView startDateField;
@@ -55,7 +57,6 @@ public class aEditEmployee extends AppCompatActivity {
             return;
         }
 
-        Employee employeeToEdit = null;
         try {
             employeeToEdit = databaseHelper.getEmployeeById(idToEdit);
         } catch (Exception e) {
@@ -101,5 +102,33 @@ public class aEditEmployee extends AppCompatActivity {
 
         datePickerDialog.getDatePicker().updateDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
         datePickerDialog.show();
+    }
+
+    public void handleUpdateDetails(View v) {
+        String firstName = firstNameField.getText().toString().trim();
+        String lastName = lastNameField.getText().toString().trim();
+        String email = emailField.getText().toString().trim();
+        String department = departmentField.getText().toString().trim();
+        String startDate = startDateField.getText().toString().trim();
+
+        String salaryString = salaryField.getText().toString().trim();
+        salaryString = salaryString.replace("£","");
+        float salary = Float.parseFloat(salaryString);
+
+        if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || department.isEmpty() ||
+                salaryString.isEmpty() || startDate.isEmpty()) {
+            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        employeeToEdit.setFirstName(firstName);
+        employeeToEdit.setLastName(lastName);
+        employeeToEdit.setEmail(email);
+        employeeToEdit.setDepartment(department);
+        employeeToEdit.setSalary(salary);
+        employeeToEdit.setStartDate(startDate);
+
+        databaseHelper.updateUserInDatabase(this, employeeToEdit);
+        finish();
     }
 }
