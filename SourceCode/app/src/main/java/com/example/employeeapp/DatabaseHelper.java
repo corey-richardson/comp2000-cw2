@@ -2,6 +2,7 @@ package com.example.employeeapp;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.CursorIndexOutOfBoundsException;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -130,18 +131,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Helper Methods for Mapping Cursors to Objects
     public Employee cursorToEmployee(Cursor cursor) {
-        return new Employee(
-                cursor.getInt(cursor.getColumnIndexOrThrow("id")),
-                cursor.getString(cursor.getColumnIndexOrThrow("first_name")),
-                cursor.getString(cursor.getColumnIndexOrThrow("last_name")),
-                cursor.getString(cursor.getColumnIndexOrThrow("email")),
-                cursor.getString(cursor.getColumnIndexOrThrow("department")),
-                cursor.getFloat(cursor.getColumnIndexOrThrow("salary")),
-                cursor.getString(cursor.getColumnIndexOrThrow("start_date")),
-                cursor.getInt(cursor.getColumnIndexOrThrow("holiday_allowance")),
-                cursor.getString(cursor.getColumnIndexOrThrow("password")),
-                cursor.getString(cursor.getColumnIndexOrThrow("role"))
-        );
+        Log.d("cursorToEmployee", "Attempting to convert Cursor to Employee.");
+        Employee employee = null;
+        try {
+            if (cursor.moveToFirst()) {
+                employee = new Employee(
+                        cursor.getInt(cursor.getColumnIndexOrThrow("id")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("first_name")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("last_name")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("email")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("department")),
+                        cursor.getFloat(cursor.getColumnIndexOrThrow("salary")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("start_date")),
+                        cursor.getInt(cursor.getColumnIndexOrThrow("holiday_allowance")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("password")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("role"))
+                );
+                Log.d("cursorToEmployee", "Created Employee Object for " + employee.getFullName());
+            } else {
+                Log.d("cursorToEmployee", "Cursor is empty; no Employee created.");
+            }
+        } catch (Exception e) {
+            Log.e("cursorToEmployee", "Failed to convert Cursor to Employee", e);
+        }
+        return employee;
     }
 
     public PtoRequest cursorToPtoRequest(Cursor cursor) {
@@ -176,17 +189,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public Employee getEmployeeById(int userId) {
+        Log.d("getEmployeeByID", "Attempting to get Employee #" + userId);
         Employee employee = null;
         Cursor cursor = null;
         try (SQLiteDatabase db = getReadableDatabase()) {
             cursor = db.rawQuery("SELECT * FROM User WHERE id = ?", new String[]{ Integer.toString(userId) });
+            Log.d("getEmployeeByID", "Found " + cursor.getCount() + " employees.");
             employee = cursorToEmployee(cursor);
-            return employee;
+            Log.d("getEmployeeByID", "Converted Cursor to Employee.");
         } catch (Exception e) {
-            return null;
+            Log.e("getEmployeeByID", "Failed to get Employee #" + userId);
         } finally {
             if (cursor != null) { cursor.close(); }
         }
+
+        return employee;
     }
 
     public List<PtoRequest> getAllPtoRequests() {
