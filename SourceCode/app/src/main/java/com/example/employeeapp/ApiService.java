@@ -43,7 +43,6 @@ public class ApiService {
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                RequestQueue queue = Volley.newRequestQueue(context);
                 String healthCheckUrl = API_URL + "/health";
                 Log.d("HealthCheckUrl", healthCheckUrl);
 
@@ -53,14 +52,16 @@ public class ApiService {
                             public void onResponse(String response) {
                                 Log.d("VolleyResponse", "Response is: " + response);
                             }
-                        }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e("VolleyError", "No response!", error);
-                        Toast.makeText(context, "No response from API.", Toast.LENGTH_LONG).show();
-                    }
-                });
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.e("VolleyError", "No response!", error);
+                                Toast.makeText(context, "No response from API.", Toast.LENGTH_LONG).show();
+                            }
+                        });
 
+                queue = Volley.newRequestQueue(context);
                 queue.add(stringRequest);
             }
         });
