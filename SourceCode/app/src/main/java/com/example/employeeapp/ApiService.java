@@ -49,6 +49,10 @@ public class ApiService {
         new UpdateUserTask(context).execute(employee);
     }
 
+    public static void apiDeleteUser(Context context, Employee employee) {
+        new DeleteUserTask(context).execute(employee);
+    }
+
     // AsyncTask Classes
     // API HealthCheck Task
     private static class HealthCheck extends AsyncTask<Void, Void, Void> {
@@ -253,4 +257,40 @@ public class ApiService {
         }
     }
 
+    private static class DeleteUserTask extends AsyncTask<Employee, Void, Void> {
+        private final Context context;
+
+        public DeleteUserTask(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        protected Void doInBackground(Employee... employees) {
+            Employee employee = employees[0];
+            String deleteEmployeeUrl = API_URL + "/employees/delete/" + employee.getId();
+
+            StringRequest request = new StringRequest(Request.Method.DELETE, deleteEmployeeUrl,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            // Handle success response
+                            // Toast.makeText(context, "Employee deleted successfully!", Toast.LENGTH_SHORT).show();
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            // Handle error response
+                            Log.e("DeleteUser", "Error deleting employee", error);
+                            // Toast.makeText(context, "Failed to delete employee.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+            );
+
+            queue = getRequestQueue(context);
+            queue.add(request);
+
+            return null;
+        }
+    }
 }
