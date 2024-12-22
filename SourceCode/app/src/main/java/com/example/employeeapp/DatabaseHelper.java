@@ -296,7 +296,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             db.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e("InsertUser", "Failed to insert new user. ");
+            Log.e("InsertUser", "Failed to insert new user.");
             throw new SQLException("Failed to insert new user.");
         } finally {
             db.endTransaction();
