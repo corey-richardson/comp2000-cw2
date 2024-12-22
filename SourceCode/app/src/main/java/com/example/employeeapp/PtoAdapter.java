@@ -1,9 +1,12 @@
 package com.example.employeeapp;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -123,6 +126,26 @@ public class PtoAdapter extends BaseAdapter {
             context.startActivity(iLaunchEditPtoRequest);
         });
 
+        resubmitButton.setOnClickListener(v -> {
+            updateRequestStatus(ptoRequest, "Waiting");
+        });
+
         return convertView;
+    }
+
+    private void updateRequestStatus(PtoRequest ptoRequest, String updatedStatus) {
+        ContentValues statusValue = new ContentValues();
+        statusValue.put("status", updatedStatus);
+
+        ptoRequest.setStatus(updatedStatus);
+        try (SQLiteDatabase db = databaseHelper.getWritableDatabase()) {
+            db.update("PtoRequest", statusValue, "id = ?", new String[]{ Integer.toString(ptoRequest.getId()) });
+            Toast.makeText(context, updatedStatus + " PTO Request.", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Toast.makeText(context, "Failed to update PTO Request.", Toast.LENGTH_SHORT).show();
+            Log.e("UpdateRequestStatus", "Error while updating PTO request status: ", e);
+        }
+
+        notifyDataSetChanged();
     }
 }
