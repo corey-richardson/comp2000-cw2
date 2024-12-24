@@ -352,6 +352,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Delete Methods
     // https://www.geeksforgeeks.org/how-to-delete-data-in-sqlite-database-in-android/
+        public void deleteEmployee(int id) {
+        try (SQLiteDatabase db = getWritableDatabase()) { // AndroidStudio suggested this \_O_/
+            db.delete("User", "id = ?", new String[]{Integer.toString(id)});
+            db.delete("UserSettings", "user_id = ?", new String[]{Integer.toString(id)});
+        } catch (SQLException e) {
+            Log.e("DatabaseHelper", "Error deleting employee " + id, e);
+            throw e; // Propagates the error to PtoAdapter::cancelPtoRequest to Toast in context
+        }
+    }
+
     public void deletePtoRequest(int id) {
 
         try (SQLiteDatabase db = getWritableDatabase()) { // AndroidStudio suggested this \_O_/
@@ -362,17 +372,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         // statement automatically manages resources and ensures they are closed after use
     }
-
-    public void deleteEmployee(int id) {
-        try (SQLiteDatabase db = getWritableDatabase()) { // AndroidStudio suggested this \_O_/
-            db.delete("User", "id = ?", new String[]{Integer.toString(id)});
-            db.delete("UserSettings", "user_id = ?", new String[]{Integer.toString(id)});
-        } catch (SQLException e) {
-            Log.e("DatabaseHelper", "Error deleting employee " + id, e);
-            throw e; // Propagates the error to PtoAdapter::cancelPtoRequest to Toast in context
-        }
-    }
-
 
     // Authentication and User Management Methods
     // Writes user to SharedPreferences if exists in database
@@ -467,6 +466,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         return userSettings;
+    }
+
+    public void updateUserSettings(Employee user, UserSettings userSettings) {
+        updateUserSettings(user.getId(), userSettings);
     }
 
     public void updateUserSettings(int userId, UserSettings userSettings) {
