@@ -1,0 +1,105 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/25.0.1 Chrome/128.0.6613.186 Electron/32.2.6 Safari/537.36" version="25.0.1">
+  <diagram name="Page-1" id="8-Zngsbm5omcHnjSQh-F">
+    <mxGraphModel dx="871" dy="1120" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="83PmdML_kd68LMiRjyrm-1" value="DatabaseHelper" style="swimlane;fontStyle=2;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="120" width="320" height="672" as="geometry">
+            <mxRectangle x="230" y="140" width="160" height="26" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="83PmdML_kd68LMiRjyrm-2" value="-DATABASE_NAME : String" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rounded=0;shadow=0;html=0;" vertex="1" parent="83PmdML_kd68LMiRjyrm-1">
+          <mxGeometry y="26" width="320" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="83PmdML_kd68LMiRjyrm-3" value="-DATABASE_VERSION : int" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rounded=0;shadow=0;html=0;" vertex="1" parent="83PmdML_kd68LMiRjyrm-1">
+          <mxGeometry y="52" width="320" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="83PmdML_kd68LMiRjyrm-4" value="-instance : DatabaseHelper" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rounded=0;shadow=0;html=0;" vertex="1" parent="83PmdML_kd68LMiRjyrm-1">
+          <mxGeometry y="78" width="320" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="83PmdML_kd68LMiRjyrm-5" value="" style="line;html=1;strokeWidth=1;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" vertex="1" parent="83PmdML_kd68LMiRjyrm-1">
+          <mxGeometry y="104" width="320" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="83PmdML_kd68LMiRjyrm-6" value="+getInstance() : DatabaseHelper" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="83PmdML_kd68LMiRjyrm-1">
+          <mxGeometry y="126" width="320" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="83PmdML_kd68LMiRjyrm-7" value="+onCreate(SQLiteDatabase) : void" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="83PmdML_kd68LMiRjyrm-1">
+          <mxGeometry y="152" width="320" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="83PmdML_kd68LMiRjyrm-8" value="+onUpgrade(SQLiteDatabase, int, int) : void" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="83PmdML_kd68LMiRjyrm-1">
+          <mxGeometry y="178" width="320" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="83PmdML_kd68LMiRjyrm-9" value="+cursorToEmployee(Cursor) : Employee" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="83PmdML_kd68LMiRjyrm-1">
+          <mxGeometry y="204" width="320" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="83PmdML_kd68LMiRjyrm-10" value="+cursorToPtoRequest(Cursor) : PtoRequest" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="83PmdML_kd68LMiRjyrm-1">
+          <mxGeometry y="230" width="320" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="83PmdML_kd68LMiRjyrm-17" value="+getAllEmployees() : List&lt;Employee&gt;" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="83PmdML_kd68LMiRjyrm-1">
+          <mxGeometry y="256" width="320" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="83PmdML_kd68LMiRjyrm-18" value="+getEmployeeById(int) : Employee" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="83PmdML_kd68LMiRjyrm-1">
+          <mxGeometry y="282" width="320" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="83PmdML_kd68LMiRjyrm-19" value="+getAllPtoRequests() : List&lt;PtoRequest&gt;" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="83PmdML_kd68LMiRjyrm-1">
+          <mxGeometry y="308" width="320" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="83PmdML_kd68LMiRjyrm-20" value="+getManager(int) : Employee" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="83PmdML_kd68LMiRjyrm-1">
+          <mxGeometry y="334" width="320" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="83PmdML_kd68LMiRjyrm-21" value="+getAllPtoRequestsByRequester(int) : List&lt;PtoRequest&gt;" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="83PmdML_kd68LMiRjyrm-1">
+          <mxGeometry y="360" width="320" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="83PmdML_kd68LMiRjyrm-22" value="+insertUser(Context, Employee) : void" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="83PmdML_kd68LMiRjyrm-1">
+          <mxGeometry y="386" width="320" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="83PmdML_kd68LMiRjyrm-24" value="+updateUserInDatabase(Context, Employee) : void" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="83PmdML_kd68LMiRjyrm-1">
+          <mxGeometry y="412" width="320" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="83PmdML_kd68LMiRjyrm-25" value="+deleteEmployee(int) : void" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="83PmdML_kd68LMiRjyrm-1">
+          <mxGeometry y="438" width="320" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="83PmdML_kd68LMiRjyrm-23" value="+deletePtoRequest(int) : void" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="83PmdML_kd68LMiRjyrm-1">
+          <mxGeometry y="464" width="320" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="83PmdML_kd68LMiRjyrm-26" value="+authenticateUser(Context, String, String) : boolean" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="83PmdML_kd68LMiRjyrm-1">
+          <mxGeometry y="490" width="320" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="83PmdML_kd68LMiRjyrm-28" value="+saveCurrentUser(Context, Employee) : void" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="83PmdML_kd68LMiRjyrm-1">
+          <mxGeometry y="516" width="320" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="83PmdML_kd68LMiRjyrm-27" value="+loadCurrentUser(Context) : Employee" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="83PmdML_kd68LMiRjyrm-1">
+          <mxGeometry y="542" width="320" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="83PmdML_kd68LMiRjyrm-29" value="+clearCurrentUser(Context) : void" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="83PmdML_kd68LMiRjyrm-1">
+          <mxGeometry y="568" width="320" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="83PmdML_kd68LMiRjyrm-30" value="+loadUserSettings(Employee) : UserSettings" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="83PmdML_kd68LMiRjyrm-1">
+          <mxGeometry y="594" width="320" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="83PmdML_kd68LMiRjyrm-31" value="+updateUserSettings(Employee, UserSettings) : void" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="83PmdML_kd68LMiRjyrm-1">
+          <mxGeometry y="620" width="320" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="83PmdML_kd68LMiRjyrm-32" value="+updateUserSettings(int, UserSettings) : void" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="83PmdML_kd68LMiRjyrm-1">
+          <mxGeometry y="646" width="320" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="83PmdML_kd68LMiRjyrm-11" value="SQLiteOpenHelper" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="460" y="120" width="260" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="83PmdML_kd68LMiRjyrm-12" value="+onCreate(SQLiteDatabase) : void" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="83PmdML_kd68LMiRjyrm-11">
+          <mxGeometry y="26" width="260" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="83PmdML_kd68LMiRjyrm-13" value="+onUpgrade(SQLiteDatabase, int, int) : void" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="83PmdML_kd68LMiRjyrm-11">
+          <mxGeometry y="52" width="260" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="83PmdML_kd68LMiRjyrm-16" value="Extends" style="endArrow=block;endSize=16;endFill=0;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="83PmdML_kd68LMiRjyrm-2" target="83PmdML_kd68LMiRjyrm-12">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="330" y="250" as="sourcePoint" />
+            <mxPoint x="390" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
