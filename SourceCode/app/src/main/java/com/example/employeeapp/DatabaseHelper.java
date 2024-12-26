@@ -343,7 +343,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Delete Methods
     // https://www.geeksforgeeks.org/how-to-delete-data-in-sqlite-database-in-android/
-        public void deleteEmployee(int id) {
+    public void deleteEmployee(int id) {
         try (SQLiteDatabase db = getWritableDatabase()) { // AndroidStudio suggested this \_O_/
             db.delete("User", "id = ?", new String[]{Integer.toString(id)});
             db.delete("UserSettings", "user_id = ?", new String[]{Integer.toString(id)});
