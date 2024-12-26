@@ -19,7 +19,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Class attributes
     private static final String DATABASE_NAME = "database.db";
-    private static final int DATABASE_VERSION = 14;
+    private static final int DATABASE_VERSION = 15;
     private static DatabaseHelper instance;
 
 
@@ -76,18 +76,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "UNIQUE(requester_id, start_date, end_date)" +
                 ");";
 
-        String createLineTable = "CREATE TABLE Line (" +
-                "manager_id INT NOT NULL," +
-                "subordinate_id INT NOT NULL," +
-                "FOREIGN KEY (manager_id) REFERENCES User (id)," +
-                "FOREIGN KEY (subordinate_id) REFERENCES User (id)" +
-                ");";
-
         try {
             db.execSQL(createUserTable);
             db.execSQL(createUserSettingsTable);
             db.execSQL(createPtoRequestTable);
-            db.execSQL(createLineTable);
             Log.d("DatabaseCreationSuccess", (DATABASE_NAME + " " + DATABASE_VERSION + " was created."));
         } catch (Exception e) {
             Log.d("DatabaseCreationError", Log.getStackTraceString(e));
@@ -123,7 +115,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS User;");
         db.execSQL("DROP TABLE IF EXISTS UserSettings;");
         db.execSQL("DROP TABLE IF EXISTS PtoRequest;");
-        db.execSQL("DROP TABLE IF EXISTS Line;");
 
         onCreate(db);
     }
