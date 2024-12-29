@@ -1,3 +1,10 @@
 ~$*
 ~*.tmp
+
 .$*.bkp
+
+*.mp4*
+*.m4a*
+*.webm
+*.veg*
+!ReportVideo.mp4
